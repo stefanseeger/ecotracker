@@ -1,4 +1,5 @@
 """Sensor platform for Ecotracker integration."""
+
 from __future__ import annotations
 
 from datetime import timedelta
@@ -34,6 +35,17 @@ _LOGGER = logging.getLogger(__name__)
 
 CONF_SCAN_INTERVAL = "scan_interval"
 DEFAULT_SCAN_INTERVAL = 5
+API_RESPONSE_JSON_KEYS = [
+    "power",
+    "powerPhase1",
+    "powerPhase2",
+    "powerPhase3",
+    "powerAvg",
+    "energyCounterIn",
+    "energyCounterOut",
+]
+
+API_ENDPOINT = "/v1/json"
 
 
 async def async_setup_entry(
@@ -44,14 +56,14 @@ async def async_setup_entry(
     """Set up Ecotracker sensors based on a config entry."""
     ip_address = entry.data[CONF_IP_ADDRESS]
     scan_interval = entry.data.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL)
-    
-    url = f"http://{ip_address}/v1/json"
-    
+
+    url = f"http://{ip_address}{API_ENDPOINT}"
+
     session = async_get_clientsession(hass)
     coordinator = EcotrackerCoordinator(hass, session, url, scan_interval)
-    
+
     await coordinator.async_config_entry_first_refresh()
-    
+
     entities = [
         EcotrackerPowerSensor(coordinator, entry),
         EcotrackerPowerPhase1Sensor(coordinator, entry),
@@ -61,7 +73,7 @@ async def async_setup_entry(
         EcotrackerEnergyInSensor(coordinator, entry),
         EcotrackerEnergyOutSensor(coordinator, entry),
     ]
-    
+
     async_add_entities(entities)
 
 
@@ -69,11 +81,11 @@ class EcotrackerCoordinator(DataUpdateCoordinator):
     """Class to manage fetching Ecotracker data."""
 
     def __init__(
-        self, 
-        hass: HomeAssistant, 
-        session: aiohttp.ClientSession, 
+        self,
+        hass: HomeAssistant,
+        session: aiohttp.ClientSession,
         url: str,
-        scan_interval: int
+        scan_interval: int,
     ) -> None:
         """Initialize."""
         super().__init__(
@@ -91,17 +103,19 @@ class EcotrackerCoordinator(DataUpdateCoordinator):
             async with async_timeout.timeout(10):
                 async with self.session.get(self.url) as response:
                     if response.status != 200:
-                        raise UpdateFailed(f"Error fetching data: HTTP {response.status}")
+                        raise UpdateFailed(
+                            f"Error fetching data: HTTP {response.status}"
+                        )
                     data = await response.json()
-                    
-                    if not all(key in data for key in ["power", "powerPhase1", "powerPhase2", "powerPhase3", "powerAvg", "energyCounterIn", "energyCounterOut"]):
+
+                    if not all(key in data for key in API_RESPONSE_JSON_KEYS):
                         raise UpdateFailed("Missing required keys in response")
-                    
+
                     return data
         except aiohttp.ClientError as err:
-            raise UpdateFailed(f"Error communicating with API: {err}")
+            raise UpdateFailed(f"Error communicating with API: {err}") from err
         except Exception as err:
-            raise UpdateFailed(f"Unexpected error: {err}")
+            raise UpdateFailed(f"Unexpected error: {err}") from err
 
 
 class EcotrackerSensorBase(CoordinatorEntity, SensorEntity):

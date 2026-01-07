@@ -1,4 +1,5 @@
 """Config flow for Ecotracker integration."""
+
 from __future__ import annotations
 
 import logging
@@ -7,6 +8,7 @@ from typing import Any
 import aiohttp
 import async_timeout
 import voluptuous as vol
+from sensor import API_RESPONSE_JSON_KEYS, API_ENDPOINT
 
 from homeassistant import config_entries
 from homeassistant.const import CONF_IP_ADDRESS
@@ -34,27 +36,27 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
 async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str, Any]:
     """Validate the user input allows us to connect."""
     ip_address = data[CONF_IP_ADDRESS]
-    
-    url = f"http://{ip_address}/v1/json"
+
+    url = f"http://{ip_address}{API_ENDPOINT}"
 
     session = async_get_clientsession(hass)
-    
+
     try:
         async with async_timeout.timeout(10):
             async with session.get(url) as response:
                 if response.status != 200:
                     raise CannotConnect(f"HTTP {response.status}")
-                
+
                 json_data = await response.json()
-                
+
                 # Validate required keys
-                if not all(key in json_data for key in ["power", "energyCounterIn", "energyCounterOut"]):
+                if not all(key in json_data for key in API_RESPONSE_JSON_KEYS):
                     raise InvalidData("Missing required keys in JSON response")
-                
+
     except aiohttp.ClientError as err:
-        raise CannotConnect(f"Connection error: {err}")
+        raise CannotConnect(f"Connection error: {err}") from err
     except Exception as err:
-        raise CannotConnect(f"Unexpected error: {err}")
+        raise CannotConnect(f"Unexpected error: {err}") from err
 
     return {"title": f"Ecotracker ({ip_address})"}
 
@@ -69,7 +71,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     ) -> FlowResult:
         """Handle the initial step."""
         errors: dict[str, str] = {}
-        
+
         if user_input is not None:
             try:
                 info = await validate_input(self.hass, user_input)
@@ -103,12 +105,13 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         if user_input is not None:
             # Update config entry with new data
             self.hass.config_entries.async_update_entry(
-                self.config_entry,
-                data={**self.config_entry.data, **user_input}
+                self.config_entry, data={**self.config_entry.data, **user_input}
             )
             return self.async_create_entry(title="", data={})
 
-        current_interval = self.config_entry.data.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL)
+        current_interval = self.config_entry.data.get(
+            CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL
+        )
         ip = self.config_entry.data.get(CONF_IP_ADDRESS, "")
 
         return self.async_show_form(
@@ -117,9 +120,9 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
                 {
                     vol.Required(CONF_IP_ADDRESS, default=ip): str,
                     vol.Optional(CONF_SCAN_INTERVAL, default=current_interval): vol.All(
-                        vol.Coerce(int), vol.Range(min=1, max=3600)
+                        vol.Coerce(int), vol.Range(min=1, max=86400)
                     ),
-                } 
+                }
             ),
         )
 
