@@ -22,20 +22,6 @@
       "already_configured": "Device is already configured"
     }
   },
-  "options": {
-    "step": {
-      "init": {
-        "title": "Ecotracker options",
-        "description": "Configure Ecotracker settings",
-        "data": {
-          "scan_interval": "Polling Interval (seconds)"
-        },
-        "data_description": {
-          "scan_interval": "How often to poll the device (1-86400 seconds)"
-        }
-      }
-    }
-  },
   "entity": {
     "sensor": {
       "power": {
