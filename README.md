@@ -4,10 +4,6 @@ Give me a tip: [paypal.me/StefanSeeger](https://www.paypal.com/paypalme/StefanSe
 
 Custom integration for Ecotracker energy monitoring device. It directly accessed the local HTTP server.
 
-## Prerequisite
-
-Ecotracker must have the local HTTP server activated
-
 ## Installation
 
 ### Prerequisites
