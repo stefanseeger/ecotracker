@@ -29,23 +29,15 @@ from homeassistant.helpers.update_coordinator import (
     UpdateFailed,
 )
 
-from . import DOMAIN
+from .const import (
+    DOMAIN,
+    CONF_SCAN_INTERVAL,
+    DEFAULT_SCAN_INTERVAL,
+    API_ENDPOINT,
+    API_REQUIRED_RESPONSE_JSON_KEYS,
+)
 
 _LOGGER = logging.getLogger(__name__)
-
-CONF_SCAN_INTERVAL = "scan_interval"
-DEFAULT_SCAN_INTERVAL = 5
-API_RESPONSE_JSON_KEYS = [
-    "power",
-    "powerPhase1",
-    "powerPhase2",
-    "powerPhase3",
-    "powerAvg",
-    "energyCounterIn",
-    "energyCounterOut",
-]
-
-API_ENDPOINT = "/v1/json"
 
 
 async def async_setup_entry(
@@ -108,7 +100,7 @@ class EcotrackerCoordinator(DataUpdateCoordinator):
                         )
                     data = await response.json()
 
-                    if not all(key in data for key in API_RESPONSE_JSON_KEYS):
+                    if not all(key in data for key in API_REQUIRED_RESPONSE_JSON_KEYS):
                         raise UpdateFailed("Missing required keys in response")
 
                     return data
