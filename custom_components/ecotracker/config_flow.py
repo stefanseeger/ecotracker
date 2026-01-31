@@ -1,8 +1,10 @@
 """Config flow for Ecotracker integration."""
 
 from __future__ import annotations
+
 import logging
 from typing import Any
+
 import aiohttp
 import async_timeout
 import voluptuous as vol
@@ -13,11 +15,11 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .const import (
-    DOMAIN,
-    CONF_SCAN_INTERVAL,
-    DEFAULT_SCAN_INTERVAL,
     API_ENDPOINT,
     API_REQUIRED_RESPONSE_JSON_KEYS,
+    CONF_SCAN_INTERVAL,
+    DEFAULT_SCAN_INTERVAL,
+    DOMAIN,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -107,7 +109,10 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     if not all(
                         key in json_data for key in API_REQUIRED_RESPONSE_JSON_KEYS
                     ):
-                        raise InvalidData("Missing required keys in JSON response")
+                        _LOGGER.exception(
+                            "Invalid data received: %s, missing keys from %s", data, API_REQUIRED_RESPONSE_JSON_KEYS)
+                        raise InvalidData(
+                            "Missing required keys in JSON response")
 
         except aiohttp.ClientError as err:
             raise CannotConnect(f"Connection error: {err}") from err

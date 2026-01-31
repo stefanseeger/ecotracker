@@ -2,23 +2,18 @@
 
 from __future__ import annotations
 
-from datetime import timedelta
 import logging
+from datetime import timedelta
 
 import aiohttp
 import async_timeout
-
 from homeassistant.components.sensor import (
-    SensorEntity,
     SensorDeviceClass,
+    SensorEntity,
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import (
-    CONF_IP_ADDRESS,
-    UnitOfPower,
-    UnitOfEnergy,
-)
+from homeassistant.const import CONF_IP_ADDRESS, UnitOfEnergy, UnitOfPower
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.entity import DeviceInfo
@@ -30,11 +25,11 @@ from homeassistant.helpers.update_coordinator import (
 )
 
 from .const import (
-    DOMAIN,
-    CONF_SCAN_INTERVAL,
-    DEFAULT_SCAN_INTERVAL,
     API_ENDPOINT,
     API_REQUIRED_RESPONSE_JSON_KEYS,
+    CONF_SCAN_INTERVAL,
+    DEFAULT_SCAN_INTERVAL,
+    DOMAIN,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -101,6 +96,8 @@ class EcotrackerCoordinator(DataUpdateCoordinator):
                     data = await response.json()
 
                     if not all(key in data for key in API_REQUIRED_RESPONSE_JSON_KEYS):
+                        _LOGGER.exception(
+                            "Invalid data received: %s, missing keys from %s", data, API_REQUIRED_RESPONSE_JSON_KEYS)
                         raise UpdateFailed("Missing required keys in response")
 
                     return data
