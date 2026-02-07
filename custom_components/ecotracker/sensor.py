@@ -95,7 +95,7 @@ class EcotrackerCoordinator(DataUpdateCoordinator):
                         )
                     data = await response.json()
 
-                    if not all(key in data for key in API_REQUIRED_RESPONSE_JSON_KEYS):
+                    if not any(key in data for key in API_REQUIRED_RESPONSE_JSON_KEYS):
                         _LOGGER.exception(
                             "Invalid data received: %s, missing keys from %s", data, API_REQUIRED_RESPONSE_JSON_KEYS)
                         raise UpdateFailed("Missing required keys in response")

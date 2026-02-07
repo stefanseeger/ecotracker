@@ -51,11 +51,11 @@ To change the polling interval after setup:
 - Multiple sensors:
   - Power (W)
   - Power average (last minute)
+  - Energy In (kWh)
+  - Energy Out (kWh) (optional)
   - Power phase 1 (optional)
   - Power phase 2 (optional)
   - Power phase 3 (optional)
-  - Energy In (kWh)
-  - Energy Out (kWh)
 - Compatible with Home Assistant Energy Dashboard
 - Config flow UI for easy setup
 - Options flow for changing settings without re-adding the integration
@@ -63,9 +63,9 @@ To change the polling interval after setup:
 ## Sensors
 
 - `sensor.ecotracker_power` - Current power consumption in Watts
+- `sensor.ecotracker_power_average` - Average power consumption (last minute)
+- `sensor.ecotracker_energy_in` - Total energy imported in Watt-hours
+- `sensor.ecotracker_energy_out` - Total energy exported in Watt-hours (optional)
 - `sensor.ecotracker_power_phase_1` - Power consumption of phase 1 in Watts (optional)
 - `sensor.ecotracker_power_phase_2` - Power consumption of phase 2 in Watts (optional)
 - `sensor.ecotracker_power_phase_3` - Power consumption of phase 3 in Watts (optional)
-- `sensor.ecotracker_power_average` - Average power consumption (last minute)
-- `sensor.ecotracker_energy_in` - Total energy imported in Watt-hours
-- `sensor.ecotracker_energy_out` - Total energy exported in Watt-hours

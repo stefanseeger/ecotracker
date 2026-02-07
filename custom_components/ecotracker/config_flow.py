@@ -106,7 +106,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     json_data = await response.json()
 
                     # Validate required keys
-                    if not all(
+                    if not any(
                         key in json_data for key in API_REQUIRED_RESPONSE_JSON_KEYS
                     ):
                         _LOGGER.exception(
