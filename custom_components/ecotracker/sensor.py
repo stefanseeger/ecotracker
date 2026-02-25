@@ -58,6 +58,8 @@ async def async_setup_entry(
         EcotrackerPowerPhase3Sensor(coordinator, entry),
         EcotrackerPowerAvgSensor(coordinator, entry),
         EcotrackerEnergyInSensor(coordinator, entry),
+        EcotrackerEnergyInT1Sensor(coordinator, entry),
+        EcotrackerEnergyInT2Sensor(coordinator, entry),
         EcotrackerEnergyOutSensor(coordinator, entry),
     ]
 
