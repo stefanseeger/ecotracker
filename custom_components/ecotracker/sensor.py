@@ -234,6 +234,40 @@ class EcotrackerEnergyInSensor(EcotrackerSensorBase):
         """Return the state of the sensor."""
         return self.coordinator.data.get("energyCounterIn")
 
+class EcotrackerEnergyInT1Sensor(EcotrackerSensorBase):
+    """Representation of Ecotracker Energy Counter InT1 Sensor."""
+
+    def __init__(self, coordinator: EcotrackerCoordinator, entry: ConfigEntry) -> None:
+        """Initialize the sensor."""
+        super().__init__(coordinator, entry)
+        self._attr_translation_key = "energy_inT1"
+        self._attr_unique_id = f"{entry.entry_id}_energy_inT1"
+        self._attr_device_class = SensorDeviceClass.ENERGY
+        self._attr_state_class = SensorStateClass.TOTAL_INCREASING
+        self._attr_native_unit_of_measurement = UnitOfEnergy.WATT_HOUR
+
+    @property
+    def native_value(self):
+        """Return the state of the sensor."""
+        return self.coordinator.data.get("energyCounterInT1")
+
+class EcotrackerEnergyInT2Sensor(EcotrackerSensorBase):
+    """Representation of Ecotracker Energy Counter InT2 Sensor."""
+
+    def __init__(self, coordinator: EcotrackerCoordinator, entry: ConfigEntry) -> None:
+        """Initialize the sensor."""
+        super().__init__(coordinator, entry)
+        self._attr_translation_key = "energy_inT2"
+        self._attr_unique_id = f"{entry.entry_id}_energy_inT2"
+        self._attr_device_class = SensorDeviceClass.ENERGY
+        self._attr_state_class = SensorStateClass.TOTAL_INCREASING
+        self._attr_native_unit_of_measurement = UnitOfEnergy.WATT_HOUR
+
+    @property
+    def native_value(self):
+        """Return the state of the sensor."""
+        return self.coordinator.data.get("energyCounterInT2")
+
 
 class EcotrackerEnergyOutSensor(EcotrackerSensorBase):
     """Representation of Ecotracker Energy Counter Out Sensor."""
