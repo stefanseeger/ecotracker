@@ -53,6 +53,8 @@ To change the polling interval after setup:
   - Power (W)
   - Power average (last minute)
   - Energy In (kWh)
+  - Energy InT1 (1.8.1) (kWh)
+  - Energy InT2 (1.8.2) (kWh)
   - Energy Out (kWh) (optional)
   - Power phase 1 (optional)
   - Power phase 2 (optional)
@@ -66,6 +68,8 @@ To change the polling interval after setup:
 - `sensor.ecotracker_power` - Current power consumption in Watts
 - `sensor.ecotracker_power_average` - Average power consumption (last minute)
 - `sensor.ecotracker_energy_in` - Total energy imported in Watt-hours
+- `sensor.ecotracker_energy_inT1` - Energy imported (1.8.1) in Watt-hours
+- `sensor.ecotracker_energy_inT2` - Energy imported (1.8.2) in Watt-hours
 - `sensor.ecotracker_energy_out` - Total energy exported in Watt-hours (optional)
 - `sensor.ecotracker_power_phase_1` - Power consumption of phase 1 in Watts (optional)
 - `sensor.ecotracker_power_phase_2` - Power consumption of phase 2 in Watts (optional)
