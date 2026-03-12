@@ -51,14 +51,14 @@ To change the polling interval after setup:
 - Configurable polling interval (1-86400 seconds, default: 60 seconds)
 - Multiple sensors:
   - Power (W)
-  - Power average (last minute)
+  - Power average (last minute) (W)
   - Energy In (Wh)
-  - Energy InT1 (1.8.1) (Wh)
-  - Energy InT2 (1.8.2) (Wh)
+  - Energy InT1 (1.8.1) (Wh) (optional)
+  - Energy InT2 (1.8.2) (Wh) (optional)
   - Energy Out (Wh) (optional)
-  - Power phase 1 (optional)
-  - Power phase 2 (optional)
-  - Power phase 3 (optional)
+- Power phase 1 (W) (optional)
+- Power phase 2 (W) (optional)
+- Power phase 3 (W) (optional)
 - Compatible with Home Assistant Energy Dashboard
 - Config flow UI for easy setup
 - Options flow for changing settings without re-adding the integration
