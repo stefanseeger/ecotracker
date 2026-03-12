@@ -21,6 +21,6 @@ updates:
     labels:
       - "pr: dependency-update"
     schedule:
-      interval: weekly
+      interval: daily
       time: "06:00"
     open-pull-requests-limit: 10
