@@ -56,9 +56,9 @@ To change the polling interval after setup:
   - Energy InT1 (1.8.1) (Wh) (optional)
   - Energy InT2 (1.8.2) (Wh) (optional)
   - Energy Out (Wh) (optional)
-- Power phase 1 (W) (optional)
-- Power phase 2 (W) (optional)
-- Power phase 3 (W) (optional)
+  - Power phase 1 (W) (optional)
+  - Power phase 2 (W) (optional)
+  - Power phase 3 (W) (optional)
 - Compatible with Home Assistant Energy Dashboard
 - Config flow UI for easy setup
 - Options flow for changing settings without re-adding the integration
