@@ -8,5 +8,7 @@ API_REQUIRED_RESPONSE_JSON_KEYS = [
     "power",
     "powerAvg",
     "energyCounterIn",
+    "energyCounterInT1",
+    "energyCounterInT2",
     "energyCounterOut",
 ]
