@@ -2,9 +2,8 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/python
 {
   "name": "Python 3",
-  // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-  "image": "mcr.microsoft.com/devcontainers/python:2-3.12-trixie",
-  "postStartCommand": "pip install -r requirements.txt",
+  "image": "mcr.microsoft.com/devcontainers/python:3",
+  "postStartCommand": "pip install --upgrade pip && pip install -r requirements.txt",
 
   // Features to add to the dev container. More info: https://containers.dev/features.
   "features": {
@@ -12,13 +11,6 @@
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
 
-  // Use 'forwardPorts' to make a list of ports inside the container available locally.
-  // "forwardPorts": [],
-
-  // Use 'postCreateCommand' to run commands after the container is created.
-  // "postCreateCommand": "pip3 install --user -r requirements.txt",
-
-  // Configure tool-specific properties.
   "customizations": {
     "vscode": {
       "extensions": [
@@ -29,7 +21,6 @@
         "GitHub.vscode-pull-request-github",
         "GitHub.copilot"
       ],
-      // Please keep this file in sync with settings in home-assistant/.vscode/settings.default.jsonc
       "settings": {
         "python.experiments.optOutFrom": ["pythonTestAdapter"],
         "python.defaultInterpreterPath": "/home/vscode/.local/ha-venv/bin/python",
@@ -71,7 +62,4 @@
       }
     }
   }
-
-  // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-  // "remoteUser": "root"
 }
