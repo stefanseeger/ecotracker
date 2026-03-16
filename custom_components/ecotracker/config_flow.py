@@ -8,7 +8,6 @@ from typing import Any
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.const import CONF_IP_ADDRESS
-from homeassistant.data_entry_flow import FlowResult
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import UpdateFailed
@@ -39,7 +38,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     VERSION = 1
     MINOR_VERSION = 1
 
-    async def async_step_user(self, user_input: dict[str, Any] | None = None) -> FlowResult:
+    async def async_step_user(self, user_input: dict[str, Any] | None = None):
         """Handle the initial step."""
         errors: dict[str, str] = {}
 
@@ -58,7 +57,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         return self.async_show_form(step_id="user", data_schema=STEP_USER_DATA_SCHEMA, errors=errors)
 
-    async def async_step_reconfigure(self, user_input: dict[str, Any] | None = None) -> FlowResult:
+    async def async_step_reconfigure(self, user_input: dict[str, Any] | None = None):
         """Handle reconfiguration of an existing entry."""
         errors: dict[str, str] = {}
 
