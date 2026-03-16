@@ -43,10 +43,10 @@
       "energy_in": {
         "name": "Total grid import"
       },
-      "energy_inT1": {
+      "energy_in_t1": {
         "name": "Grid import (1.8.1)"
       },
-      "energy_inT2": {
+      "energy_in_t2": {
         "name": "Grid import (1.8.2)"
       },
       "energy_out": {

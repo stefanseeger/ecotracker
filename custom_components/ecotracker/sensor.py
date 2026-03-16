@@ -242,8 +242,8 @@ class EcotrackerEnergyInT1Sensor(EcotrackerSensorBase):
     def __init__(self, coordinator: EcotrackerCoordinator, entry: ConfigEntry) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator, entry)
-        self._attr_translation_key = "energy_inT1"
-        self._attr_unique_id = f"{entry.entry_id}_energy_inT1"
+        self._attr_translation_key = "energy_in_t1"
+        self._attr_unique_id = f"{entry.entry_id}_energy_in_t1"
         self._attr_device_class = SensorDeviceClass.ENERGY
         self._attr_state_class = SensorStateClass.TOTAL_INCREASING
         self._attr_native_unit_of_measurement = UnitOfEnergy.WATT_HOUR
@@ -259,8 +259,8 @@ class EcotrackerEnergyInT2Sensor(EcotrackerSensorBase):
     def __init__(self, coordinator: EcotrackerCoordinator, entry: ConfigEntry) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator, entry)
-        self._attr_translation_key = "energy_inT2"
-        self._attr_unique_id = f"{entry.entry_id}_energy_inT2"
+        self._attr_translation_key = "energy_in_t2"
+        self._attr_unique_id = f"{entry.entry_id}_energy_in_t2"
         self._attr_device_class = SensorDeviceClass.ENERGY
         self._attr_state_class = SensorStateClass.TOTAL_INCREASING
         self._attr_native_unit_of_measurement = UnitOfEnergy.WATT_HOUR
