@@ -3,14 +3,16 @@
 {
   "name": "Python 3",
   "image": "mcr.microsoft.com/devcontainers/python:3",
-  "postStartCommand": "pip install --upgrade pip && pip install -r requirements.txt",
-
+  "postStartCommand": [
+    "pip install --upgrade pip",
+    "pip install -r requirements.txt",
+    "pre-commit install"
+  ],
   // Features to add to the dev container. More info: https://containers.dev/features.
   "features": {
     "ghcr.io/devcontainers/features/copilot-cli:1": {},
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
-
   "customizations": {
     "vscode": {
       "extensions": [
@@ -22,11 +24,15 @@
         "GitHub.copilot"
       ],
       "settings": {
-        "python.experiments.optOutFrom": ["pythonTestAdapter"],
+        "python.experiments.optOutFrom": [
+          "pythonTestAdapter"
+        ],
         "python.defaultInterpreterPath": "/home/vscode/.local/ha-venv/bin/python",
         "python.pythonPath": "/home/vscode/.local/ha-venv/bin/python",
         "python.terminal.activateEnvInCurrentTerminal": true,
-        "python.testing.pytestArgs": ["--no-cov"],
+        "python.testing.pytestArgs": [
+          "--no-cov"
+        ],
         "pylint.importStrategy": "fromEnvironment",
         "python.analysis.typeCheckingMode": "basic",
         "editor.formatOnPaste": false,
@@ -55,7 +61,9 @@
         },
         "json.schemas": [
           {
-            "fileMatch": ["homeassistant/components/*/manifest.json"],
+            "fileMatch": [
+              "homeassistant/components/*/manifest.json"
+            ],
             "url": "${containerWorkspaceFolder}/script/json_schemas/manifest_schema.json"
           }
         ]

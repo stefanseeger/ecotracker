@@ -35,6 +35,7 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
     }
 )
 
+
 class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Ecotracker."""
 
@@ -104,38 +105,69 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     async with session.get(url) as response:
                         if response.status != 200:
                             if attempt < MAX_RETRIES:
-                                _LOGGER.debug("Error fetching data: %s, Attempt %d failed, retrying...", response.status, attempt + 1)
+                                _LOGGER.debug(
+                                    "Error fetching data: %s, Attempt %d failed, retrying...",
+                                    response.status,
+                                    attempt + 1,
+                                )
                                 continue
                             raise CannotConnect(
                                 f"Error fetching data: HTTP {response.status}"
                             )
                         data = await response.json()
 
-                        if not any(key in data for key in API_REQUIRED_RESPONSE_JSON_KEYS):
+                        if not any(
+                            key in data for key in API_REQUIRED_RESPONSE_JSON_KEYS
+                        ):
                             if attempt < MAX_RETRIES:
-                                _LOGGER.debug("Invalid data received: %s, missing keys from %s, Attempt %d failed, retrying...", data, API_REQUIRED_RESPONSE_JSON_KEYS, attempt + 1)
+                                _LOGGER.debug(
+                                    "Invalid data received: %s, missing keys from %s, Attempt %d failed, retrying...",
+                                    data,
+                                    API_REQUIRED_RESPONSE_JSON_KEYS,
+                                    attempt + 1,
+                                )
                                 continue
-                            raise CannotConnect("Invalid data received: %s, missing keys from %s", data, API_REQUIRED_RESPONSE_JSON_KEYS)
+                            raise CannotConnect(
+                                "Invalid data received: %s, missing keys from %s",
+                                data,
+                                API_REQUIRED_RESPONSE_JSON_KEYS,
+                            )
 
                         return data
             except asyncio.TimeoutError as err:
                 if attempt < MAX_RETRIES:
-                    _LOGGER.debug("Timeout error: %s, Attempt %d failed, retrying...", err, attempt + 1)
+                    _LOGGER.debug(
+                        "Timeout error: %s, Attempt %d failed, retrying...",
+                        err,
+                        attempt + 1,
+                    )
                     continue
                 raise CannotConnect(f"Timeout error: {err}") from err
             except aiohttp.ClientError as err:
                 if attempt < MAX_RETRIES:
-                    _LOGGER.debug("Client error: %s, Attempt %d failed, retrying...", err, attempt + 1)
+                    _LOGGER.debug(
+                        "Client error: %s, Attempt %d failed, retrying...",
+                        err,
+                        attempt + 1,
+                    )
                     continue
                 raise CannotConnect(f"Error communicating with API: {err}") from err
             except CannotConnect as err:
                 if attempt < MAX_RETRIES:
-                    _LOGGER.debug("CannotConnect: %s, Attempt %d failed, retrying...", err, attempt + 1)
+                    _LOGGER.debug(
+                        "CannotConnect: %s, Attempt %d failed, retrying...",
+                        err,
+                        attempt + 1,
+                    )
                     continue
                 raise CannotConnect(f"Unexpected error: {err}") from err
             except Exception as err:
                 if attempt < MAX_RETRIES:
-                    _LOGGER.debug("Exception: %s, Attempt %d failed, retrying...", err, attempt + 1)
+                    _LOGGER.debug(
+                        "Exception: %s, Attempt %d failed, retrying...",
+                        err,
+                        attempt + 1,
+                    )
                     continue
                 raise CannotConnect(f"Unexpected error: {err}") from err
 

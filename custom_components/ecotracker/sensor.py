@@ -36,6 +36,7 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
+
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: ConfigEntry,
@@ -96,38 +97,69 @@ class EcotrackerCoordinator(DataUpdateCoordinator):
                     async with self.session.get(self.url) as response:
                         if response.status != 200:
                             if attempt < MAX_RETRIES:
-                                _LOGGER.debug("Error fetching data: %s, Attempt %d failed, retrying...", response.status, attempt + 1)
+                                _LOGGER.debug(
+                                    "Error fetching data: %s, Attempt %d failed, retrying...",
+                                    response.status,
+                                    attempt + 1,
+                                )
                                 continue
                             raise UpdateFailed(
                                 f"Error fetching data: HTTP {response.status}"
                             )
                         data = await response.json()
 
-                        if not any(key in data for key in API_REQUIRED_RESPONSE_JSON_KEYS):
+                        if not any(
+                            key in data for key in API_REQUIRED_RESPONSE_JSON_KEYS
+                        ):
                             if attempt < MAX_RETRIES:
-                                _LOGGER.debug("Invalid data received: %s, missing keys from %s, Attempt %d failed, retrying...", data, API_REQUIRED_RESPONSE_JSON_KEYS, attempt + 1)
+                                _LOGGER.debug(
+                                    "Invalid data received: %s, missing keys from %s, Attempt %d failed, retrying...",
+                                    data,
+                                    API_REQUIRED_RESPONSE_JSON_KEYS,
+                                    attempt + 1,
+                                )
                                 continue
-                            raise UpdateFailed("Invalid data received: %s, missing keys from %s", data, API_REQUIRED_RESPONSE_JSON_KEYS)
+                            raise UpdateFailed(
+                                "Invalid data received: %s, missing keys from %s",
+                                data,
+                                API_REQUIRED_RESPONSE_JSON_KEYS,
+                            )
 
                         return data
             except asyncio.TimeoutError as err:
                 if attempt < MAX_RETRIES:
-                    _LOGGER.debug("Timeout error: %s, Attempt %d failed, retrying...", err, attempt + 1)
+                    _LOGGER.debug(
+                        "Timeout error: %s, Attempt %d failed, retrying...",
+                        err,
+                        attempt + 1,
+                    )
                     continue
                 raise UpdateFailed(f"Timeout error: {err}") from err
             except aiohttp.ClientError as err:
                 if attempt < MAX_RETRIES:
-                    _LOGGER.debug("Client error: %s, Attempt %d failed, retrying...", err, attempt + 1)
+                    _LOGGER.debug(
+                        "Client error: %s, Attempt %d failed, retrying...",
+                        err,
+                        attempt + 1,
+                    )
                     continue
                 raise UpdateFailed(f"Error communicating with API: {err}") from err
             except UpdateFailed as err:
                 if attempt < MAX_RETRIES:
-                    _LOGGER.debug("UpdateFailed: %s, Attempt %d failed, retrying...", err, attempt + 1)
+                    _LOGGER.debug(
+                        "UpdateFailed: %s, Attempt %d failed, retrying...",
+                        err,
+                        attempt + 1,
+                    )
                     continue
                 raise UpdateFailed(f"Unexpected error: {err}") from err
             except Exception as err:
                 if attempt < MAX_RETRIES:
-                    _LOGGER.debug("Exception: %s, Attempt %d failed, retrying...", err, attempt + 1)
+                    _LOGGER.debug(
+                        "Exception: %s, Attempt %d failed, retrying...",
+                        err,
+                        attempt + 1,
+                    )
                     continue
                 raise UpdateFailed(f"Unexpected error: {err}") from err
 
@@ -259,6 +291,7 @@ class EcotrackerEnergyInSensor(EcotrackerSensorBase):
         """Return the state of the sensor."""
         return self.coordinator.data.get("energyCounterIn")
 
+
 class EcotrackerEnergyInT1Sensor(EcotrackerSensorBase):
     """Representation of Ecotracker Energy Counter InT1 Sensor."""
 
@@ -275,6 +308,7 @@ class EcotrackerEnergyInT1Sensor(EcotrackerSensorBase):
     def native_value(self):
         """Return the state of the sensor."""
         return self.coordinator.data.get("energyCounterInT1")
+
 
 class EcotrackerEnergyInT2Sensor(EcotrackerSensorBase):
     """Representation of Ecotracker Energy Counter InT2 Sensor."""
