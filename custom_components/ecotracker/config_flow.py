@@ -2,27 +2,24 @@
 
 from __future__ import annotations
 
-import asyncio
 import logging
 from typing import Any
 
-import aiohttp
-import async_timeout
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.const import CONF_IP_ADDRESS
 from homeassistant.data_entry_flow import FlowResult
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.update_coordinator import UpdateFailed
 
 from .const import (
     API_ENDPOINT,
-    API_REQUIRED_RESPONSE_JSON_KEYS,
     CONF_SCAN_INTERVAL,
     DEFAULT_SCAN_INTERVAL,
     DOMAIN,
-    MAX_RETRIES,
 )
+from .coordinator import fetch_data_with_retry
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -86,77 +83,14 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     async def validate_input(self, data: dict[str, Any]) -> dict[str, Any]:
         """Validate the user input allows us to connect."""
         ip_address = data[CONF_IP_ADDRESS]
-
         url = f"http://{ip_address}{API_ENDPOINT}"
 
         session = async_get_clientsession(self.hass)
 
-        for attempt in range(MAX_RETRIES + 1):
-            try:
-                async with async_timeout.timeout(10), session.get(url) as response:
-                    if response.status != 200:
-                        if attempt < MAX_RETRIES:
-                            _LOGGER.debug(
-                                "Error fetching data: %s, Attempt %d failed, retrying...",
-                                response.status,
-                                attempt + 1,
-                            )
-                            continue
-                        raise CannotConnect(f"Error fetching data: HTTP {response.status}")
-                    data = await response.json()
-
-                    if not any(key in data for key in API_REQUIRED_RESPONSE_JSON_KEYS):
-                        if attempt < MAX_RETRIES:
-                            _LOGGER.debug(
-                                "Invalid data received: %s, missing keys from %s, Attempt %d failed, retrying...",
-                                data,
-                                API_REQUIRED_RESPONSE_JSON_KEYS,
-                                attempt + 1,
-                            )
-                            continue
-                        raise CannotConnect(
-                            "Invalid data received: %s, missing keys from %s",
-                            data,
-                            API_REQUIRED_RESPONSE_JSON_KEYS,
-                        )
-
-                    return data
-            except asyncio.TimeoutError as err:
-                if attempt < MAX_RETRIES:
-                    _LOGGER.debug(
-                        "Timeout error: %s, Attempt %d failed, retrying...",
-                        err,
-                        attempt + 1,
-                    )
-                    continue
-                raise CannotConnect(f"Timeout error: {err}") from err
-            except aiohttp.ClientError as err:
-                if attempt < MAX_RETRIES:
-                    _LOGGER.debug(
-                        "Client error: %s, Attempt %d failed, retrying...",
-                        err,
-                        attempt + 1,
-                    )
-                    continue
-                raise CannotConnect(f"Error communicating with API: {err}") from err
-            except CannotConnect as err:
-                if attempt < MAX_RETRIES:
-                    _LOGGER.debug(
-                        "CannotConnect: %s, Attempt %d failed, retrying...",
-                        err,
-                        attempt + 1,
-                    )
-                    continue
-                raise CannotConnect(f"Unexpected error: {err}") from err
-            except Exception as err:
-                if attempt < MAX_RETRIES:
-                    _LOGGER.debug(
-                        "Exception: %s, Attempt %d failed, retrying...",
-                        err,
-                        attempt + 1,
-                    )
-                    continue
-                raise CannotConnect(f"Unexpected error: {err}") from err
+        try:
+            await fetch_data_with_retry(session, url)
+        except UpdateFailed as err:
+            raise CannotConnect(f"Validation failed: {err}") from err
 
         return {"title": f"Ecotracker ({ip_address})"}
 
