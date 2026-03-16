@@ -1,0 +1,17 @@
+name: CodeQL Configuration for Ecotracker
+description: Custom CodeQL configuration for the Ecotracker Home Assistant integration
+
+paths:
+  - custom_components/ecotracker
+
+paths-ignore:
+  - tests/
+  - .devcontainer/
+  - docs/
+
+queries:
+  - uses: github/codeql-queries@main
+  - uses: github/codeql-go@main
+security-and-quality:
+  - query: "python/quantum"
+    description: "Quantum database queries (includes security and quality)"
