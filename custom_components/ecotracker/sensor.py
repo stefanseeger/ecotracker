@@ -111,6 +111,11 @@ class EcotrackerCoordinator(DataUpdateCoordinator):
                             raise UpdateFailed("Invalid data received: %s, missing keys from %s", data, API_REQUIRED_RESPONSE_JSON_KEYS)
 
                         return data
+            except asyncio.TimeoutError as err:
+                if attempt < MAX_RETRIES:
+                    _LOGGER.debug("Timeout error: %s, Attempt %d failed, retrying...", err, attempt + 1)
+                    continue
+                raise UpdateFailed(f"Timeout error: {err}") from err
             except aiohttp.ClientError as err:
                 if attempt < MAX_RETRIES:
                     _LOGGER.debug("Client error: %s, Attempt %d failed, retrying...", err, attempt + 1)
