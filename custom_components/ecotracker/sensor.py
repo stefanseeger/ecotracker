@@ -35,6 +35,8 @@ from .const import (
 _LOGGER = logging.getLogger(__name__)
 
 
+ MAX_RETRIES = 3
+
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: ConfigEntry,
@@ -88,25 +90,42 @@ class EcotrackerCoordinator(DataUpdateCoordinator):
 
     async def _async_update_data(self):
         """Fetch data from API endpoint."""
-        try:
-            async with async_timeout.timeout(10):
-                async with self.session.get(self.url) as response:
-                    if response.status != 200:
-                        raise UpdateFailed(
-                            f"Error fetching data: HTTP {response.status}"
-                        )
-                    data = await response.json()
 
-                    if not any(key in data for key in API_REQUIRED_RESPONSE_JSON_KEYS):
-                        _LOGGER.exception(
-                            "Invalid data received: %s, missing keys from %s", data, API_REQUIRED_RESPONSE_JSON_KEYS)
-                        raise UpdateFailed("Missing required keys in response")
+        for attempt in range(MAX_RETRIES + 1):
+            try:
+                async with async_timeout.timeout(10):
+                    async with self.session.get(self.url) as response:
+                        if response.status != 200:
+                            if attempt < MAX_RETRIES:
+                                _LOGGER.debug("Error fetching data: %s, Attempt %d failed, retrying...", response.status, attempt + 1)
+                                continue
+                            raise UpdateFailed(
+                                f"Error fetching data: HTTP {response.status}"
+                            )
+                        data = await response.json()
 
-                    return data
-        except aiohttp.ClientError as err:
-            raise UpdateFailed(f"Error communicating with API: {err}") from err
-        except Exception as err:
-            raise UpdateFailed(f"Unexpected error: {err}") from err
+                        if not any(key in data for key in API_REQUIRED_RESPONSE_JSON_KEYS):
+                            if attempt < MAX_RETRIES:
+                                _LOGGER.debug("Invalid data received: %s, missing keys from %s, Attempt %d failed, retrying...", data, API_REQUIRED_RESPONSE_JSON_KEYS, attempt + 1)
+                                continue
+                            raise UpdateFailed("Invalid data received: %s, missing keys from %s", data, API_REQUIRED_RESPONSE_JSON_KEYS)
+
+                        return data
+            except aiohttp.ClientError as err:
+                if attempt < MAX_RETRIES:
+                    _LOGGER.debug("Client error: %s, Attempt %d failed, retrying...", err, attempt + 1)
+                    continue
+                raise UpdateFailed(f"Error communicating with API: {err}") from err
+            except UpdateFailed as err:
+                if attempt < MAX_RETRIES:
+                    _LOGGER.debug("UpdateFailed: %s, Attempt %d failed, retrying...", err, attempt + 1)
+                    continue
+                raise UpdateFailed(f"Unexpected error: {err}") from err
+            except Exception as err:
+                if attempt < MAX_RETRIES:
+                    _LOGGER.debug("Exception: %s, Attempt %d failed, retrying...", err, attempt + 1)
+                    continue
+                raise UpdateFailed(f"Unexpected error: {err}") from err
 
 
 class EcotrackerSensorBase(CoordinatorEntity, SensorEntity):
