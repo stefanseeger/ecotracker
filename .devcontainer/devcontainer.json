@@ -22,7 +22,8 @@
         "esbenp.prettier-vscode",
         "GitHub.vscode-pull-request-github",
         "GitHub.copilot",
-        "eamodio.gitlens"
+        "eamodio.gitlens",
+        "github.vscode-github-actions"
       ],
       "settings": {
         "python.experiments.optOutFrom": [

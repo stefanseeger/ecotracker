@@ -2,7 +2,7 @@
 
 Give me a tip: [paypal.me/StefanSeeger](https://www.paypal.com/paypalme/StefanSeeger) [buymeacoffee.com/stefsee](https://buymeacoffee.com/stefsee)
 
-Custom integration for Ecotracker energy monitoring device. It directly accessed the local HTTP server.
+Custom integration for Ecotracker energy monitoring device. It directly accessed the local HTTP server. Depending on the [official API Specification](https://everhome.cloud/en/developer/ecotracker)
 
 ## Installation
 
@@ -21,30 +21,30 @@ Custom integration for Ecotracker energy monitoring device. It directly accessed
    - Click the three dots in the top right
    - Select "Custom repositories"
    - Add the repository URL and select "Integration" as the category
-2. Click "Install"
-3. Restart Home Assistant
+1. Click "Install"
+1. Restart Home Assistant
 
 ### Manual Installation
 
 1. Copy the `custom_components/ecotracker` folder to your Home Assistant's `custom_components` directory
-2. Restart Home Assistant
+1. Restart Home Assistant
 
 ## Configuration
 
 1. Go to Settings > Devices & Services
-2. Click "+ Add Integration"
-3. Search for "Ecotracker"
-4. Enter your device's IP address
-5. Set the polling interval (default: 60 seconds, range: 1-86400 seconds)
+1. Click "+ Add Integration"
+1. Search for "Ecotracker"
+1. Enter your device's IP address
+1. Set the polling interval (default: 60 seconds, range: 1-86400 seconds)
 
 ### Changing Settings
 
 To change the polling interval after setup:
 
 1. Go to Settings > Devices & Services
-2. Find your Ecotracker device
-3. Click "Configure"
-4. Update the polling interval and IP address as needed
+1. Find your Ecotracker device
+1. Click "Configure"
+1. Update the polling interval and IP address as needed
 
 ## Features
 
@@ -53,8 +53,8 @@ To change the polling interval after setup:
   - Power (W)
   - Power average (last minute) (W)
   - Energy In (Wh)
-  - Energy InT1 (1.8.1) (Wh) (optional)
-  - Energy InT2 (1.8.2) (Wh) (optional)
+  - Energy In T1 (1.8.1) (Wh) (optional)
+  - Energy In T2 (1.8.2) (Wh) (optional)
   - Energy Out (Wh) (optional)
   - Power phase 1 (W) (optional)
   - Power phase 2 (W) (optional)
