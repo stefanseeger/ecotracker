@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import logging
 from datetime import timedelta
 
@@ -30,12 +31,10 @@ from .const import (
     CONF_SCAN_INTERVAL,
     DEFAULT_SCAN_INTERVAL,
     DOMAIN,
+    MAX_RETRIES,
 )
 
 _LOGGER = logging.getLogger(__name__)
-
-
- MAX_RETRIES = 3
 
 async def async_setup_entry(
     hass: HomeAssistant,

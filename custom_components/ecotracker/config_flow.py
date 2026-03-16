@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import logging
 from typing import Any
 
@@ -20,6 +21,7 @@ from .const import (
     CONF_SCAN_INTERVAL,
     DEFAULT_SCAN_INTERVAL,
     DOMAIN,
+    MAX_RETRIES,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -100,7 +102,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         for attempt in range(MAX_RETRIES + 1):
             try:
                 async with async_timeout.timeout(10):
-                    async with self.session.get(self.url) as response:
+                    async with session.get(url) as response:
                         if response.status != 200:
                             if attempt < MAX_RETRIES:
                                 _LOGGER.debug("Error fetching data: %s, Attempt %d failed, retrying...", response.status, attempt + 1)
