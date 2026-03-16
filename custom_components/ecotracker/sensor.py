@@ -17,7 +17,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_IP_ADDRESS, UnitOfEnergy, UnitOfPower
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from homeassistant.helpers.entity import DeviceInfo
+from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity,
@@ -93,39 +93,34 @@ class EcotrackerCoordinator(DataUpdateCoordinator):
 
         for attempt in range(MAX_RETRIES + 1):
             try:
-                async with async_timeout.timeout(10):
-                    async with self.session.get(self.url) as response:
-                        if response.status != 200:
-                            if attempt < MAX_RETRIES:
-                                _LOGGER.debug(
-                                    "Error fetching data: %s, Attempt %d failed, retrying...",
-                                    response.status,
-                                    attempt + 1,
-                                )
-                                continue
-                            raise UpdateFailed(
-                                f"Error fetching data: HTTP {response.status}"
+                async with async_timeout.timeout(10), self.session.get(self.url) as response:
+                    if response.status != 200:
+                        if attempt < MAX_RETRIES:
+                            _LOGGER.debug(
+                                "Error fetching data: %s, Attempt %d failed, retrying...",
+                                response.status,
+                                attempt + 1,
                             )
-                        data = await response.json()
+                            continue
+                        raise UpdateFailed(f"Error fetching data: HTTP {response.status}")
+                    data = await response.json()
 
-                        if not any(
-                            key in data for key in API_REQUIRED_RESPONSE_JSON_KEYS
-                        ):
-                            if attempt < MAX_RETRIES:
-                                _LOGGER.debug(
-                                    "Invalid data received: %s, missing keys from %s, Attempt %d failed, retrying...",
-                                    data,
-                                    API_REQUIRED_RESPONSE_JSON_KEYS,
-                                    attempt + 1,
-                                )
-                                continue
-                            raise UpdateFailed(
-                                "Invalid data received: %s, missing keys from %s",
+                    if not any(key in data for key in API_REQUIRED_RESPONSE_JSON_KEYS):
+                        if attempt < MAX_RETRIES:
+                            _LOGGER.debug(
+                                "Invalid data received: %s, missing keys from %s, Attempt %d failed, retrying...",
                                 data,
                                 API_REQUIRED_RESPONSE_JSON_KEYS,
+                                attempt + 1,
                             )
+                            continue
+                        raise UpdateFailed(
+                            "Invalid data received: %s, missing keys from %s",
+                            data,
+                            API_REQUIRED_RESPONSE_JSON_KEYS,
+                        )
 
-                        return data
+                    return data
             except asyncio.TimeoutError as err:
                 if attempt < MAX_RETRIES:
                     _LOGGER.debug(

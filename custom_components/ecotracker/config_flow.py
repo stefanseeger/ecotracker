@@ -42,9 +42,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     VERSION = 1
     MINOR_VERSION = 1
 
-    async def async_step_user(
-        self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    async def async_step_user(self, user_input: dict[str, Any] | None = None) -> FlowResult:
         """Handle the initial step."""
         errors: dict[str, str] = {}
 
@@ -61,13 +59,9 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             else:
                 return self.async_create_entry(title=info["title"], data=user_input)
 
-        return self.async_show_form(
-            step_id="user", data_schema=STEP_USER_DATA_SCHEMA, errors=errors
-        )
+        return self.async_show_form(step_id="user", data_schema=STEP_USER_DATA_SCHEMA, errors=errors)
 
-    async def async_step_reconfigure(
-        self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    async def async_step_reconfigure(self, user_input: dict[str, Any] | None = None) -> FlowResult:
         """Handle reconfiguration of an existing entry."""
         errors: dict[str, str] = {}
 
@@ -87,9 +81,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     data_updates=user_input,
                 )
 
-        return self.async_show_form(
-            step_id="reconfigure", data_schema=STEP_USER_DATA_SCHEMA, errors=errors
-        )
+        return self.async_show_form(step_id="reconfigure", data_schema=STEP_USER_DATA_SCHEMA, errors=errors)
 
     async def validate_input(self, data: dict[str, Any]) -> dict[str, Any]:
         """Validate the user input allows us to connect."""
@@ -101,39 +93,34 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         for attempt in range(MAX_RETRIES + 1):
             try:
-                async with async_timeout.timeout(10):
-                    async with session.get(url) as response:
-                        if response.status != 200:
-                            if attempt < MAX_RETRIES:
-                                _LOGGER.debug(
-                                    "Error fetching data: %s, Attempt %d failed, retrying...",
-                                    response.status,
-                                    attempt + 1,
-                                )
-                                continue
-                            raise CannotConnect(
-                                f"Error fetching data: HTTP {response.status}"
+                async with async_timeout.timeout(10), session.get(url) as response:
+                    if response.status != 200:
+                        if attempt < MAX_RETRIES:
+                            _LOGGER.debug(
+                                "Error fetching data: %s, Attempt %d failed, retrying...",
+                                response.status,
+                                attempt + 1,
                             )
-                        data = await response.json()
+                            continue
+                        raise CannotConnect(f"Error fetching data: HTTP {response.status}")
+                    data = await response.json()
 
-                        if not any(
-                            key in data for key in API_REQUIRED_RESPONSE_JSON_KEYS
-                        ):
-                            if attempt < MAX_RETRIES:
-                                _LOGGER.debug(
-                                    "Invalid data received: %s, missing keys from %s, Attempt %d failed, retrying...",
-                                    data,
-                                    API_REQUIRED_RESPONSE_JSON_KEYS,
-                                    attempt + 1,
-                                )
-                                continue
-                            raise CannotConnect(
-                                "Invalid data received: %s, missing keys from %s",
+                    if not any(key in data for key in API_REQUIRED_RESPONSE_JSON_KEYS):
+                        if attempt < MAX_RETRIES:
+                            _LOGGER.debug(
+                                "Invalid data received: %s, missing keys from %s, Attempt %d failed, retrying...",
                                 data,
                                 API_REQUIRED_RESPONSE_JSON_KEYS,
+                                attempt + 1,
                             )
+                            continue
+                        raise CannotConnect(
+                            "Invalid data received: %s, missing keys from %s",
+                            data,
+                            API_REQUIRED_RESPONSE_JSON_KEYS,
+                        )
 
-                        return data
+                    return data
             except asyncio.TimeoutError as err:
                 if attempt < MAX_RETRIES:
                     _LOGGER.debug(
