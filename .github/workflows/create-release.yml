@@ -16,11 +16,27 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      - name: Get Latest Tag
+        id: get_tag
+        run: |
+          tag=$(git describe --tags --abbrev=0 || echo "v1.0.10")
+          echo "tag=$tag" >> $GITHUB_ENV
+
+      - name: Bump Semantic Version
+        id: bump_version
+        run: |
+          latest_version=${{ env.tag }}
+          version=${latest_version#v}
+          IFS='.' read -r major minor patch <<< "$version"
+          patch=$((patch + 1))
+          new_version="v$major.$minor.$patch"
+          echo "new_version=$new_version" >> $GITHUB_ENV
+
       - name: Create Release
         uses: actions/create-release@v1
         with:
-          tag_name: ${{ github.sha }}
-          release_name: Release ${{ github.sha }}
+          tag_name: ${{ env.new_version }}
+          release_name: Release ${{ env.new_version }}
           body: |
             This release was automatically created after merging to the `main` branch.
           draft: false
