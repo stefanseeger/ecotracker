@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import asyncio
 import logging
 from datetime import timedelta
 from typing import Any
@@ -60,7 +59,7 @@ async def fetch_data_with_retry(
                     )
 
                 return data
-        except asyncio.TimeoutError as err:
+        except TimeoutError as err:
             last_error = UpdateFailed(f"Timeout error: {err}")
             if attempt < MAX_RETRIES:
                 _LOGGER.debug(
