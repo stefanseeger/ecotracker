@@ -1,0 +1,53 @@
+[project]
+name = "ecotracker"
+version = "1.0.6"
+description = "Custom integration for Ecotracker energy monitoring device in Home Assistant."
+readme = "README.md"
+requires-python = ">=3.12"
+keywords = ["home-assistant", "integration", "ecotracker", "energy"]
+license = { file = "LICENSE" }
+authors = [
+  { name = "Stefan Seeger", email = "seega@gmx.com" }
+]
+classifiers = [
+  "Programming Language :: Python :: 3.12",
+  "License :: OSI Approved :: MIT License",
+  "Topic :: Home Automation",
+]
+
+dependencies = [
+  "async-timeout==5.0.1"
+]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project.optional-dependencies]
+test = [
+  "pytest>=9.1.0",
+  "pytest-asyncio>=1.4.0",
+  "pytest-cov>=7.1.0",
+]
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "W", "C", "N", "I", "B"]
+exclude = [".git", "build", "dist", "__pycache__"]
+
+[tool.isort]
+profile = "black"
+
+[tool.pre-commit]
+
+[[tool.pre-commit.repos]]
+repo = "https://github.com/astral-sh/ruff-pre-commit"
+rev = "v0.15.5"
+
+  [[tool.pre-commit.repos.hooks]]
+id = "ruff-check"
+args = ["--fix", "custom_components"]
+
+  [[tool.pre-commit.repos.hooks]]
+id = "ruff-format"
+args = ["custom_components"]
