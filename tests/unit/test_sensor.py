@@ -8,6 +8,7 @@ from homeassistant.const import UnitOfEnergy, UnitOfPower
 
 from custom_components.ecotracker.const import DOMAIN
 from custom_components.ecotracker.sensor import (
+    EcotrackerAgePowerSensor,
     EcotrackerEnergyInSensor,
     EcotrackerEnergyInT1Sensor,
     EcotrackerEnergyInT2Sensor,
@@ -178,3 +179,26 @@ def test_sensor_has_entity_name():
     sensor = EcotrackerPowerSensor(coordinator, entry)
 
     assert sensor.has_entity_name is True
+
+
+def test_age_power_sensor_properties():
+    """Test EcotrackerAgePowerSensor properties."""
+    coordinator = create_mock_coordinator({"agePower": 5000})
+    entry = create_mock_entry()
+
+    sensor = EcotrackerAgePowerSensor(coordinator, entry)
+
+    assert sensor.native_value == 5000
+    assert sensor.native_unit_of_measurement == "ms"
+    assert sensor.unique_id == f"{TEST_ENTRY_ID}_age_power"
+    assert sensor.translation_key == "age_power"
+
+
+def test_age_power_sensor_no_value():
+    """Test EcotrackerAgePowerSensor returns None when value is missing."""
+    coordinator = create_mock_coordinator({})
+    entry = create_mock_entry()
+
+    sensor = EcotrackerAgePowerSensor(coordinator, entry)
+
+    assert sensor.native_value is None

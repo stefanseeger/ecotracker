@@ -22,4 +22,5 @@ API_OPTIONAL_RESPONSE_JSON_KEYS = [
     "energyCounterInT1",
     "energyCounterInT2",
     "energyCounterOut",
+    "agePower",
 ]

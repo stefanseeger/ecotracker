@@ -49,16 +49,6 @@ To change the polling interval after setup:
 ## Features
 
 - Configurable polling interval (1-86400 seconds, default: 60 seconds)
-- Multiple sensors:
-  - Power (W)
-  - Power average (last minute) (W)
-  - Energy In (Wh)
-  - Energy In T1 (1.8.1) (Wh) (optional)
-  - Energy In T2 (1.8.2) (Wh) (optional)
-  - Energy Out (Wh) (optional)
-  - Power phase 1 (W) (optional)
-  - Power phase 2 (W) (optional)
-  - Power phase 3 (W) (optional)
 - Compatible with Home Assistant Energy Dashboard
 - Config flow UI for easy setup
 - Options flow for changing settings without re-adding the integration
@@ -74,7 +64,9 @@ To change the polling interval after setup:
 - `sensor.ecotracker_power_phase_1` - Power consumption of phase 1 in Watts (optional)
 - `sensor.ecotracker_power_phase_2` - Power consumption of phase 2 in Watts (optional)
 - `sensor.ecotracker_power_phase_3` - Power consumption of phase 3 in Watts (optional)
+- `sensor.ecotracker_age_power` - Milliseconds since last measurement (optional)
 
 ## 📝 Disclaimer
+
 This software is not affiliated with, endorsed by, or associated with EcoTracker or everHome in any way. All product and brand names mentioned belong to their respective owners.
 It is provided as-is, without any warranties or guarantees. The authors assume no liability for any issues arising from its use.
