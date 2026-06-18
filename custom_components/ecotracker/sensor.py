@@ -250,7 +250,7 @@ class EcotrackerAgePowerSensor(EcotrackerSensorBase):
         super().__init__(coordinator, entry)
         self._attr_translation_key = "age_power"
         self._attr_unique_id = f"{entry.entry_id}_age_power"
-        self._attr_state_class = SensorStateClass.TOTAL_INCREASING
+        self._attr_state_class = SensorStateClass.MEASUREMENT
         self._attr_native_unit_of_measurement = "ms"
 
     @property
