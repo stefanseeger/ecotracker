@@ -54,6 +54,7 @@ async def async_setup_entry(
         EcotrackerEnergyInT1Sensor(coordinator, entry),
         EcotrackerEnergyInT2Sensor(coordinator, entry),
         EcotrackerEnergyOutSensor(coordinator, entry),
+        EcotrackerAgePowerSensor(coordinator, entry),
     ]
 
     async_add_entities(entities)
@@ -92,7 +93,7 @@ class EcotrackerPowerSensor(EcotrackerSensorBase):
         self._attr_native_unit_of_measurement = UnitOfPower.WATT
 
     @property
-    def native_value(self):
+    def native_value(self) -> int | None:
         """Return the state of the sensor."""
         return self.coordinator.data.get("power")
 
@@ -110,7 +111,7 @@ class EcotrackerPowerPhase1Sensor(EcotrackerSensorBase):
         self._attr_native_unit_of_measurement = UnitOfPower.WATT
 
     @property
-    def native_value(self):
+    def native_value(self) -> int | None:
         """Return the state of the sensor."""
         return self.coordinator.data.get("powerPhase1")
 
@@ -128,7 +129,7 @@ class EcotrackerPowerPhase2Sensor(EcotrackerSensorBase):
         self._attr_native_unit_of_measurement = UnitOfPower.WATT
 
     @property
-    def native_value(self):
+    def native_value(self) -> int | None:
         """Return the state of the sensor."""
         return self.coordinator.data.get("powerPhase2")
 
@@ -146,7 +147,7 @@ class EcotrackerPowerPhase3Sensor(EcotrackerSensorBase):
         self._attr_native_unit_of_measurement = UnitOfPower.WATT
 
     @property
-    def native_value(self):
+    def native_value(self) -> int | None:
         """Return the state of the sensor."""
         return self.coordinator.data.get("powerPhase3")
 
@@ -164,7 +165,7 @@ class EcotrackerPowerAvgSensor(EcotrackerSensorBase):
         self._attr_native_unit_of_measurement = UnitOfPower.WATT
 
     @property
-    def native_value(self):
+    def native_value(self) -> int | None:
         """Return the state of the sensor."""
         return self.coordinator.data.get("powerAvg")
 
@@ -182,7 +183,7 @@ class EcotrackerEnergyInSensor(EcotrackerSensorBase):
         self._attr_native_unit_of_measurement = UnitOfEnergy.WATT_HOUR
 
     @property
-    def native_value(self):
+    def native_value(self) -> int | None:
         """Return the state of the sensor."""
         return self.coordinator.data.get("energyCounterIn")
 
@@ -200,7 +201,7 @@ class EcotrackerEnergyInT1Sensor(EcotrackerSensorBase):
         self._attr_native_unit_of_measurement = UnitOfEnergy.WATT_HOUR
 
     @property
-    def native_value(self):
+    def native_value(self) -> int | None:
         """Return the state of the sensor."""
         return self.coordinator.data.get("energyCounterInT1")
 
@@ -218,7 +219,7 @@ class EcotrackerEnergyInT2Sensor(EcotrackerSensorBase):
         self._attr_native_unit_of_measurement = UnitOfEnergy.WATT_HOUR
 
     @property
-    def native_value(self):
+    def native_value(self) -> int | None:
         """Return the state of the sensor."""
         return self.coordinator.data.get("energyCounterInT2")
 
@@ -236,6 +237,23 @@ class EcotrackerEnergyOutSensor(EcotrackerSensorBase):
         self._attr_native_unit_of_measurement = UnitOfEnergy.WATT_HOUR
 
     @property
-    def native_value(self):
+    def native_value(self) -> int | None:
         """Return the state of the sensor."""
         return self.coordinator.data.get("energyCounterOut")
+
+
+class EcotrackerAgePowerSensor(EcotrackerSensorBase):
+    """Representation of Ecotracker Age Power Sensor."""
+
+    def __init__(self, coordinator: EcotrackerCoordinator, entry: ConfigEntry) -> None:
+        """Initialize the sensor."""
+        super().__init__(coordinator, entry)
+        self._attr_translation_key = "age_power"
+        self._attr_unique_id = f"{entry.entry_id}_age_power"
+        self._attr_state_class = SensorStateClass.TOTAL_INCREASING
+        self._attr_native_unit_of_measurement = "ms"
+
+    @property
+    def native_value(self) -> int | None:
+        """Return the state of the sensor."""
+        return self.coordinator.data.get("agePower")

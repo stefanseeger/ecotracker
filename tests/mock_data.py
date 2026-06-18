@@ -11,6 +11,7 @@ MOCK_API_RESPONSE_FULL = {
     "energyCounterInT1": 25000,
     "energyCounterInT2": 25000,
     "energyCounterOut": 5000,
+    "agePower": 5000,
 }
 
 # Minimal valid API response with only required fields

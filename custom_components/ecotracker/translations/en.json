@@ -51,6 +51,9 @@
       },
       "energy_out": {
         "name": "Total grid export"
+      },
+      "age_power": {
+        "name": "Milliseconds since last measurement"
       }
     }
   }
