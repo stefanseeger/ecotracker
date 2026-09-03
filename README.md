@@ -15,7 +15,7 @@ Custom integration for Ecotracker energy monitoring device. It directly accessed
 1. Make sure your calling http://your.local.ip.address/v1/json in the browser returns at least data like below. If one of the fields is missing, configuration will fail.
 ```json
 {
-	"power": 123, //mandatory
+   "power": 123, //mandatory
    "powerAvg": 456, //mandatory
    "energyCounterIn": 789 //mandatory
 }
