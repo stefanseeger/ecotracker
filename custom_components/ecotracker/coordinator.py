@@ -29,8 +29,6 @@ async def fetch_data_with_retry(
     url: str,
 ) -> dict[str, Any]:
     """Fetch data from API endpoint with retry logic."""
-    last_error: Exception | None = None
-
     for attempt in range(MAX_RETRIES + 1):
         try:
             async with async_timeout.timeout(10), session.get(url) as response:
@@ -60,7 +58,6 @@ async def fetch_data_with_retry(
 
                 return data
         except TimeoutError as err:
-            last_error = UpdateFailed(f"Timeout error: {err}")
             if attempt < MAX_RETRIES:
                 _LOGGER.debug(
                     "Timeout error: %s, Attempt %d failed, retrying...",
@@ -68,9 +65,8 @@ async def fetch_data_with_retry(
                     attempt + 1,
                 )
                 continue
-            raise last_error from err
+            raise UpdateFailed(f"Timeout error: {err}") from err
         except aiohttp.ClientError as err:
-            last_error = UpdateFailed(f"Error communicating with API: {err}")
             if attempt < MAX_RETRIES:
                 _LOGGER.debug(
                     "Client error: %s, Attempt %d failed, retrying...",
@@ -78,9 +74,8 @@ async def fetch_data_with_retry(
                     attempt + 1,
                 )
                 continue
-            raise last_error from err
+            raise UpdateFailed(f"Error communicating with API: {err}") from err
         except UpdateFailed as err:
-            last_error = UpdateFailed(f"Unexpected error: {err}")
             if attempt < MAX_RETRIES:
                 _LOGGER.debug(
                     "UpdateFailed: %s, Attempt %d failed, retrying...",
@@ -88,9 +83,8 @@ async def fetch_data_with_retry(
                     attempt + 1,
                 )
                 continue
-            raise last_error from err
+            raise UpdateFailed(f"Unexpected error: {err}") from err
         except Exception as err:
-            last_error = UpdateFailed(f"Unexpected error: {err}")
             if attempt < MAX_RETRIES:
                 _LOGGER.debug(
                     "Exception: %s, Attempt %d failed, retrying...",
@@ -98,7 +92,7 @@ async def fetch_data_with_retry(
                     attempt + 1,
                 )
                 continue
-            raise last_error from err
+            raise UpdateFailed(f"Unexpected error: {err}") from err
 
     # This should never be reached, but satisfy type checker
     raise UpdateFailed("Failed to fetch data after retries")

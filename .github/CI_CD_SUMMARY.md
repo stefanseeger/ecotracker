@@ -112,7 +112,7 @@ Run the same checks locally:
 ```bash
 # Install development dependencies
 python -m pip install --upgrade pip
-python -m pip install --group dev
+python -m pip install --editable . --group dev
 
 # Run unit tests with coverage
 pytest tests/unit/ -v --cov=custom_components/ecotracker

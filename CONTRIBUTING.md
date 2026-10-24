@@ -16,7 +16,7 @@ Install the project dependencies:
 
 ```bash
 python -m pip install --upgrade pip
-python -m pip install --group dev
+python -m pip install --editable . --group dev
 ```
 
 Run formatting and linting:
