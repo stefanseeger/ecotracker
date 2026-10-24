@@ -110,8 +110,9 @@ Each PR must pass:
 Run the same checks locally:
 
 ```bash
-# Install test dependencies
-pip install -r requirements.txt
+# Install development dependencies
+python -m pip install --upgrade pip
+python -m pip install --group dev
 
 # Run unit tests with coverage
 pytest tests/unit/ -v --cov=custom_components/ecotracker

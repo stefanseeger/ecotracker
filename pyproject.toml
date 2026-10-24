@@ -23,11 +23,19 @@ dependencies = [
 requires = ["setuptools>=84.2.1", "wheel"]
 build-backend = "setuptools.build_meta"
 
-[project.optional-dependencies]
+[dependency-groups]
 test = [
+  "homeassistant>=2026.6.3",
   "pytest>=9.1.1",
   "pytest-asyncio>=1.4.0",
   "pytest-cov>=7.1.0",
+]
+dev = [
+  { include-group = "test" },
+  "codespell>=2.4.3",
+  "isort>=9.0.2",
+  "pre-commit>=4.7.0",
+  "ruff>=0.17.1",
 ]
 
 [tool.ruff]
