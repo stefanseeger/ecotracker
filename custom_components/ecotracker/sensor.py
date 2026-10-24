@@ -43,6 +43,7 @@ async def async_setup_entry(
     coordinator = EcotrackerCoordinator(hass, session, url, scan_interval)
 
     await coordinator.async_config_entry_first_refresh()
+    hass.data[DOMAIN][entry.entry_id] = coordinator
 
     entities = [
         EcotrackerPowerSensor(coordinator, entry),

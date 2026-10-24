@@ -12,6 +12,8 @@ MOCK_API_RESPONSE_FULL = {
     "energyCounterInT2": 25000,
     "energyCounterOut": 5000,
     "agePower": 5000,
+    "rssi": -50,
+    "ssid": "FRITZBox-1234",
 }
 
 # Minimal valid API response with only required fields
