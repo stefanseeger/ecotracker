@@ -44,6 +44,19 @@ Custom integration for Ecotracker energy monitoring device. It directly accessed
 1. Enter your device's IP address
 1. Set the polling interval (default: 60 seconds, range: 1-86400 seconds)
 
+## Testing with the mock server
+
+Start the local mock API server from the repository root:
+
+```sh
+python tests/ecotracker-mock-server.py
+```
+
+It serves a static JSON response containing all supported measurement fields at
+`http://<host-ip>:8000/v1/json`. Enter that URL's host IP address in the
+integration configuration. The server listens on all network interfaces and
+uses port `8000` by default.
+
 ### Changing Settings
 
 To change the polling interval after setup:

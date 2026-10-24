@@ -16,18 +16,14 @@ MOCK_API_RESPONSE_FULL = {
     "ssid": "FRITZBox-1234",
 }
 
-# Minimal valid API response with only required fields
+# Minimal valid API response with one recognized measurement field
 MOCK_API_RESPONSE_MINIMAL = {
     "power": 1000,
-    "powerAvg": 950,
-    "energyCounterIn": 30000,
 }
 
-# Invalid response: missing required field
+# Invalid response: none of the recognized measurement fields are present
 MOCK_API_RESPONSE_MISSING_REQUIRED = {
-    "power": 2500,
-    "powerAvg": 2400,
-    # Missing energyCounterIn
+    "unrelated": 2500,
 }
 
 # Invalid response: invalid data type (string instead of number)

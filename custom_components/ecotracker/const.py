@@ -7,7 +7,7 @@ MAX_RETRIES = 3
 RETRY_BACKOFF_MULTIPLIER = 2  # Exponential backoff: 1s, 2s, 4s
 API_ENDPOINT = "/v1/json"
 
-# Required keys must be present in API response for valid data
+# At least one of these keys must be present in a valid API response
 API_REQUIRED_RESPONSE_JSON_KEYS = [
     "power",
     "powerAvg",

@@ -47,15 +47,20 @@ async def fetch_data_with_retry(
                     raise UpdateFailed(f"Error fetching data: HTTP {response.status}")
                 data = await response.json()
 
-                missing_keys = [key for key in API_REQUIRED_RESPONSE_JSON_KEYS if key not in data]
+                present_required_keys = [key for key in API_REQUIRED_RESPONSE_JSON_KEYS if key in data]
                 invalid_keys = [
                     key
                     for key in API_REQUIRED_RESPONSE_JSON_KEYS
                     if key in data and (isinstance(data[key], bool) or not isinstance(data[key], (int, float)))
                 ]
-                if missing_keys or invalid_keys:
+                if not present_required_keys:
                     raise InvalidData(
-                        f"Invalid data received: missing keys {missing_keys}, invalid values for {invalid_keys}"
+                        "Invalid data received: none of the required keys "
+                        f"{API_REQUIRED_RESPONSE_JSON_KEYS} are present; response: {data}"
+                    )
+                if invalid_keys:
+                    raise InvalidData(
+                        f"Invalid data received: invalid values for keys {invalid_keys}; response: {data}"
                     )
 
                 return data
