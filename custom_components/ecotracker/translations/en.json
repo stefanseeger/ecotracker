@@ -54,6 +54,18 @@
       },
       "age_power": {
         "name": "Milliseconds since last measurement"
+      },
+      "scan_interval": {
+        "name": "Polling interval"
+      },
+      "ip_address": {
+        "name": "IP address"
+      },
+      "rssi": {
+        "name": "Wi-Fi signal strength"
+      },
+      "ssid": {
+        "name": "Wi-Fi network"
       }
     }
   }

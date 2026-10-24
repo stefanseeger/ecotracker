@@ -24,6 +24,10 @@ from .const import (
 _LOGGER = logging.getLogger(__name__)
 
 
+class InvalidData(UpdateFailed):
+    """Raised when the device response is missing or has invalid required data."""
+
+
 async def fetch_data_with_retry(
     session: aiohttp.ClientSession,
     url: str,
@@ -43,17 +47,15 @@ async def fetch_data_with_retry(
                     raise UpdateFailed(f"Error fetching data: HTTP {response.status}")
                 data = await response.json()
 
-                if not any(key in data for key in API_REQUIRED_RESPONSE_JSON_KEYS):
-                    if attempt < MAX_RETRIES:
-                        _LOGGER.debug(
-                            "Invalid data received: %s, missing keys from %s, Attempt %d failed, retrying...",
-                            data,
-                            API_REQUIRED_RESPONSE_JSON_KEYS,
-                            attempt + 1,
-                        )
-                        continue
-                    raise UpdateFailed(
-                        f"Invalid data received: {data}, missing keys from {API_REQUIRED_RESPONSE_JSON_KEYS}"
+                missing_keys = [key for key in API_REQUIRED_RESPONSE_JSON_KEYS if key not in data]
+                invalid_keys = [
+                    key
+                    for key in API_REQUIRED_RESPONSE_JSON_KEYS
+                    if key in data and (isinstance(data[key], bool) or not isinstance(data[key], (int, float)))
+                ]
+                if missing_keys or invalid_keys:
+                    raise InvalidData(
+                        f"Invalid data received: missing keys {missing_keys}, invalid values for {invalid_keys}"
                     )
 
                 return data
@@ -75,6 +77,8 @@ async def fetch_data_with_retry(
                 )
                 continue
             raise UpdateFailed(f"Error communicating with API: {err}") from err
+        except InvalidData:
+            raise
         except UpdateFailed as err:
             if attempt < MAX_RETRIES:
                 _LOGGER.debug(
@@ -98,7 +102,7 @@ async def fetch_data_with_retry(
     raise UpdateFailed("Failed to fetch data after retries")
 
 
-class EcotrackerCoordinator(DataUpdateCoordinator):
+class EcotrackerCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     """Class to manage fetching Ecotracker data."""
 
     def __init__(

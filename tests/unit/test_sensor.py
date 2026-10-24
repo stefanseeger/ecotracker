@@ -4,20 +4,24 @@ from __future__ import annotations
 
 from unittest.mock import MagicMock
 
-from homeassistant.const import UnitOfEnergy, UnitOfPower
+from homeassistant.const import EntityCategory, UnitOfEnergy, UnitOfPower, UnitOfTime
 
-from custom_components.ecotracker.const import DOMAIN
+from custom_components.ecotracker.const import CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL, DOMAIN
 from custom_components.ecotracker.sensor import (
     EcotrackerAgePowerSensor,
     EcotrackerEnergyInSensor,
     EcotrackerEnergyInT1Sensor,
     EcotrackerEnergyInT2Sensor,
     EcotrackerEnergyOutSensor,
+    EcotrackerIPAddressSensor,
     EcotrackerPowerAvgSensor,
     EcotrackerPowerPhase1Sensor,
     EcotrackerPowerPhase2Sensor,
     EcotrackerPowerPhase3Sensor,
     EcotrackerPowerSensor,
+    EcotrackerRssiSensor,
+    EcotrackerScanIntervalSensor,
+    EcotrackerSsidSensor,
 )
 from tests.mock_data import TEST_ENTRY_ID
 
@@ -26,6 +30,7 @@ def create_mock_entry():
     """Create a mock config entry."""
     entry = MagicMock()
     entry.entry_id = TEST_ENTRY_ID
+    entry.data = {"ip_address": "192.168.1.100"}
     return entry
 
 
@@ -192,6 +197,7 @@ def test_age_power_sensor_properties():
     assert sensor.native_unit_of_measurement == "ms"
     assert sensor.unique_id == f"{TEST_ENTRY_ID}_age_power"
     assert sensor.translation_key == "age_power"
+    assert sensor.entity_category == EntityCategory.DIAGNOSTIC
 
 
 def test_age_power_sensor_no_value():
@@ -202,3 +208,56 @@ def test_age_power_sensor_no_value():
     sensor = EcotrackerAgePowerSensor(coordinator, entry)
 
     assert sensor.native_value is None
+
+
+def test_ip_address_diagnostic_sensor():
+    """Test configured IP diagnostic sensor properties."""
+    sensor = EcotrackerIPAddressSensor(create_mock_coordinator({}), create_mock_entry())
+
+    assert sensor.native_value == "192.168.1.100"
+    assert sensor.entity_category == EntityCategory.DIAGNOSTIC
+    assert sensor.unique_id == f"{TEST_ENTRY_ID}_ip_address"
+
+
+def test_scan_interval_diagnostic_sensor_properties():
+    """Test configured polling interval diagnostic sensor properties."""
+    entry = create_mock_entry()
+    entry.data[CONF_SCAN_INTERVAL] = 30
+    sensor = EcotrackerScanIntervalSensor(create_mock_coordinator({}), entry)
+
+    assert sensor.native_value == 30
+    assert sensor.native_unit_of_measurement == UnitOfTime.SECONDS
+    assert sensor.entity_category == EntityCategory.DIAGNOSTIC
+    assert sensor.unique_id == f"{TEST_ENTRY_ID}_scan_interval"
+    assert sensor.translation_key == "scan_interval"
+
+
+def test_scan_interval_diagnostic_sensor_uses_default_for_existing_entry():
+    """Test older entries without an interval use the default."""
+    sensor = EcotrackerScanIntervalSensor(create_mock_coordinator({}), create_mock_entry())
+
+    assert sensor.native_value == DEFAULT_SCAN_INTERVAL
+
+
+def test_rssi_diagnostic_sensor():
+    """Test RSSI diagnostic sensor properties and missing data."""
+    entry = create_mock_entry()
+    sensor = EcotrackerRssiSensor(create_mock_coordinator({"rssi": -50}), entry)
+    missing_sensor = EcotrackerRssiSensor(create_mock_coordinator({}), entry)
+
+    assert sensor.native_value == -50
+    assert sensor.entity_category == EntityCategory.DIAGNOSTIC
+    assert sensor.unique_id == f"{TEST_ENTRY_ID}_rssi"
+    assert missing_sensor.native_value is None
+
+
+def test_ssid_diagnostic_sensor():
+    """Test SSID diagnostic sensor properties and missing data."""
+    entry = create_mock_entry()
+    sensor = EcotrackerSsidSensor(create_mock_coordinator({"ssid": "FRITZBox-1234"}), entry)
+    missing_sensor = EcotrackerSsidSensor(create_mock_coordinator({}), entry)
+
+    assert sensor.native_value == "FRITZBox-1234"
+    assert sensor.entity_category == EntityCategory.DIAGNOSTIC
+    assert sensor.unique_id == f"{TEST_ENTRY_ID}_ssid"
+    assert missing_sensor.native_value is None

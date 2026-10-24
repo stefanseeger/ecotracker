@@ -2,10 +2,16 @@
 
 from __future__ import annotations
 
+from unittest.mock import AsyncMock, MagicMock
+
+import pytest
+from homeassistant.helpers.update_coordinator import UpdateFailed
+
 from custom_components.ecotracker.const import (
     API_OPTIONAL_RESPONSE_JSON_KEYS,
     API_REQUIRED_RESPONSE_JSON_KEYS,
 )
+from custom_components.ecotracker.coordinator import fetch_data_with_retry
 from tests.mock_data import (
     MOCK_API_RESPONSE_FULL,
     MOCK_API_RESPONSE_INVALID_TYPE,
@@ -53,3 +59,18 @@ def test_valid_response_types():
     for key in API_REQUIRED_RESPONSE_JSON_KEYS:
         value = MOCK_API_RESPONSE_FULL[key]
         assert isinstance(value, (int, float)), f"{key} should be numeric, got {type(value)}"
+
+
+async def test_fetch_data_rejects_response_missing_required_keys():
+    """A response missing any required key is rejected without retrying."""
+    response = MagicMock(status=200)
+    response.json = AsyncMock(return_value={"power": 2500})
+    response_context = AsyncMock()
+    response_context.__aenter__.return_value = response
+    session = MagicMock()
+    session.get.return_value = response_context
+
+    with pytest.raises(UpdateFailed):
+        await fetch_data_with_retry(session, "http://device/v1/json")
+
+    assert session.get.call_count == 1
