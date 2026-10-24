@@ -1,0 +1,44 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configurer Ecotracker",
+        "description": "Saisissez les détails de votre appareil Ecotracker",
+        "data": {
+          "ip_address": "Adresse IP",
+          "scan_interval": "Intervalle d'interrogation"
+        },
+        "data_description": {
+          "scan_interval": "Fréquence de requête de l'appareil (1-86400 secondes)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Échec de la connexion à l'appareil",
+      "invalid_data": "Données invalides reçues de l'appareil",
+      "unknown": "Une erreur inattendue s'est produite"
+    },
+    "abort": {
+      "already_configured": "L'appareil est déjà configuré",
+      "reconfigure_successful": "La configuration d'Ecotracker a été mise à jour avec succès"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "power": { "name": "Puissance" },
+      "power_phase_1": { "name": "Puissance phase 1" },
+      "power_phase_2": { "name": "Puissance phase 2" },
+      "power_phase_3": { "name": "Puissance phase 3" },
+      "power_avg": { "name": "Puissance moyenne (dernière minute)" },
+      "energy_in": { "name": "Import total du réseau" },
+      "energy_in_t1": { "name": "Import du réseau (1.8.1)" },
+      "energy_in_t2": { "name": "Import du réseau (1.8.2)" },
+      "energy_out": { "name": "Export total du réseau" },
+      "age_power": { "name": "Millisecondes depuis la dernière mesure" },
+      "scan_interval": { "name": "Intervalle d'interrogation" },
+      "ip_address": { "name": "Adresse IP" },
+      "rssi": { "name": "Puissance du signal Wi‑Fi" },
+      "ssid": { "name": "Réseau Wi‑Fi" }
+    }
+  }
+}

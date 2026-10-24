@@ -1,0 +1,44 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Skonfiguruj Ecotracker",
+        "description": "Wprowadź dane urządzenia Ecotracker",
+        "data": {
+          "ip_address": "Adres IP",
+          "scan_interval": "Interwał odpytywania"
+        },
+        "data_description": {
+          "scan_interval": "Jak często odpytywać urządzenie (1-86400 sekund)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Nie można połączyć się z urządzeniem",
+      "invalid_data": "Odebrano nieprawidłowe dane z urządzenia",
+      "unknown": "Wystąpił nieoczekiwany błąd"
+    },
+    "abort": {
+      "already_configured": "Urządzenie jest już skonfigurowane",
+      "reconfigure_successful": "Konfiguracja Ecotracker została pomyślnie zaktualizowana"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "power": { "name": "Moc" },
+      "power_phase_1": { "name": "Moc faza 1" },
+      "power_phase_2": { "name": "Moc faza 2" },
+      "power_phase_3": { "name": "Moc faza 3" },
+      "power_avg": { "name": "Średnia moc (ostatnia minuta)" },
+      "energy_in": { "name": "Całkowity pobór z sieci" },
+      "energy_in_t1": { "name": "Pobór z sieci (1.8.1)" },
+      "energy_in_t2": { "name": "Pobór z sieci (1.8.2)" },
+      "energy_out": { "name": "Całkowity eksport z sieci" },
+      "age_power": { "name": "Milisekundy od ostatniego pomiaru" },
+      "scan_interval": { "name": "Interwał odpytywania" },
+      "ip_address": { "name": "Adres IP" },
+      "rssi": { "name": "Siła sygnału Wi‑Fi" },
+      "ssid": { "name": "Sieć Wi‑Fi" }
+    }
+  }
+}

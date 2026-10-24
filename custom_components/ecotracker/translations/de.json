@@ -1,0 +1,72 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Ecotracker einrichten",
+        "description": "Gib die Details deines Ecotracker-Geräts ein",
+        "data": {
+          "ip_address": "IP-Adresse",
+          "scan_interval": "Abfrageintervall"
+        },
+        "data_description": {
+          "scan_interval": "Wie oft das Gerät abgefragt werden soll (1-86400 Sekunden)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Verbindung zum Gerät fehlgeschlagen",
+      "invalid_data": "Ungültige Daten vom Gerät empfangen",
+      "unknown": "Unerwarteter Fehler aufgetreten"
+    },
+    "abort": {
+      "already_configured": "Gerät ist bereits konfiguriert",
+      "reconfigure_successful": "Ecotracker-Konfiguration wurde erfolgreich aktualisiert"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "power": {
+        "name": "Leistung"
+      },
+      "power_phase_1": {
+        "name": "Leistung Phase 1"
+      },
+      "power_phase_2": {
+        "name": "Leistung Phase 2"
+      },
+      "power_phase_3": {
+        "name": "Leistung Phase 3"
+      },
+      "power_avg": {
+        "name": "Leistungsdurchschnitt (letzte Minute)"
+      },
+      "energy_in": {
+        "name": "Gesamter Verbrauch"
+      },
+      "energy_in_t1": {
+        "name": "Verbrauch (1.8.1)"
+      },
+      "energy_in_t2": {
+        "name": "Verbrauch (1.8.2)"
+      },
+      "energy_out": {
+        "name": "Gesamte Einspeisung"
+      },
+      "age_power": {
+        "name": "Millisekunden seit der letzten Messung"
+      },
+      "scan_interval": {
+        "name": "Abfrageintervall"
+      },
+      "ip_address": {
+        "name": "IP-Adresse"
+      },
+      "rssi": {
+        "name": "Wi-Fi-Signalstärke"
+      },
+      "ssid": {
+        "name": "Wi-Fi-Netzwerk"
+      }
+    }
+  }
+}

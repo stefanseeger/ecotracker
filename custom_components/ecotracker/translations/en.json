@@ -5,8 +5,8 @@
         "title": "Set up Ecotracker",
         "description": "Enter your Ecotracker device details",
         "data": {
-          "ip_address": "IP Address",
-          "scan_interval": "Polling Interval (seconds)"
+          "ip_address": "IP address",
+          "scan_interval": "Polling interval"
         },
         "data_description": {
           "scan_interval": "How often to poll the device (1-86400 seconds)"

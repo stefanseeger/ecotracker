@@ -1,0 +1,44 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Ecotracker instellen",
+        "description": "Voer de details van uw Ecotracker-apparaat in",
+        "data": {
+          "ip_address": "IP-adres",
+          "scan_interval": "Pollinginterval"
+        },
+        "data_description": {
+          "scan_interval": "Hoe vaak het apparaat moet worden gescand (1-86400 seconden)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Kan geen verbinding maken met het apparaat",
+      "invalid_data": "Ongeldige gegevens ontvangen van het apparaat",
+      "unknown": "Er is een onverwachte fout opgetreden"
+    },
+    "abort": {
+      "already_configured": "Apparaat is al geconfigureerd",
+      "reconfigure_successful": "Ecotracker-configuratie is succesvol bijgewerkt"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "power": { "name": "Vermogen" },
+      "power_phase_1": { "name": "Vermogen fase 1" },
+      "power_phase_2": { "name": "Vermogen fase 2" },
+      "power_phase_3": { "name": "Vermogen fase 3" },
+      "power_avg": { "name": "Gemiddeld vermogen (laatste minuut)" },
+      "energy_in": { "name": "Totale nettopname" },
+      "energy_in_t1": { "name": "Nettopname (1.8.1)" },
+      "energy_in_t2": { "name": "Nettopname (1.8.2)" },
+      "energy_out": { "name": "Totale nettuitvoer" },
+      "age_power": { "name": "Milliseconden sinds laatste meting" },
+      "scan_interval": { "name": "Pollinginterval" },
+      "ip_address": { "name": "IP-adres" },
+      "rssi": { "name": "Wi‑Fi-signaalsterkte" },
+      "ssid": { "name": "Wi‑Fi-netwerk" }
+    }
+  }
+}

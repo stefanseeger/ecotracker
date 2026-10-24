@@ -1,0 +1,44 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configura Ecotracker",
+        "description": "Inserisci i dettagli del tuo dispositivo Ecotracker",
+        "data": {
+          "ip_address": "Indirizzo IP",
+          "scan_interval": "Intervallo di polling"
+        },
+        "data_description": {
+          "scan_interval": "Quanto spesso interrogare il dispositivo (1-86400 secondi)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Impossibile connettersi al dispositivo",
+      "invalid_data": "Ricevuti dati non validi dal dispositivo",
+      "unknown": "Si è verificato un errore imprevisto"
+    },
+    "abort": {
+      "already_configured": "Il dispositivo è già configurato",
+      "reconfigure_successful": "La configurazione di Ecotracker è stata aggiornata correttamente"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "power": { "name": "Potenza" },
+      "power_phase_1": { "name": "Potenza fase 1" },
+      "power_phase_2": { "name": "Potenza fase 2" },
+      "power_phase_3": { "name": "Potenza fase 3" },
+      "power_avg": { "name": "Potenza media (ultimo minuto)" },
+      "energy_in": { "name": "Importo totale dalla rete" },
+      "energy_in_t1": { "name": "Importo dalla rete (1.8.1)" },
+      "energy_in_t2": { "name": "Importo dalla rete (1.8.2)" },
+      "energy_out": { "name": "Esportazione totale dalla rete" },
+      "age_power": { "name": "Millisecondi dall'ultima misurazione" },
+      "scan_interval": { "name": "Intervallo di polling" },
+      "ip_address": { "name": "Indirizzo IP" },
+      "rssi": { "name": "Potenza del segnale Wi‑Fi" },
+      "ssid": { "name": "Rete Wi‑Fi" }
+    }
+  }
+}

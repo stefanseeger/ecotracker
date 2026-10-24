@@ -1,0 +1,44 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Ställ in Ecotracker",
+        "description": "Ange information om din Ecotracker-enhet",
+        "data": {
+          "ip_address": "IP-adress",
+          "scan_interval": "Uppdateringsintervall"
+        },
+        "data_description": {
+          "scan_interval": "Hur ofta enheten ska pollas (1-86400 sekunder)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Det gick inte att ansluta till enheten",
+      "invalid_data": "Ogiltiga data mottogs från enheten",
+      "unknown": "Ett oväntat fel uppstod"
+    },
+    "abort": {
+      "already_configured": "Enheten är redan konfigurerad",
+      "reconfigure_successful": "Ecotracker-konfigurationen har uppdaterats"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "power": { "name": "Effekt" },
+      "power_phase_1": { "name": "Effekt fas 1" },
+      "power_phase_2": { "name": "Effekt fas 2" },
+      "power_phase_3": { "name": "Effekt fas 3" },
+      "power_avg": { "name": "Medeleffekt (senaste minuten)" },
+      "energy_in": { "name": "Total nätimport" },
+      "energy_in_t1": { "name": "Nätimport (1.8.1)" },
+      "energy_in_t2": { "name": "Nätimport (1.8.2)" },
+      "energy_out": { "name": "Total nätexport" },
+      "age_power": { "name": "Millisekunder sedan senaste mätning" },
+      "scan_interval": { "name": "Uppdateringsintervall" },
+      "ip_address": { "name": "IP-adress" },
+      "rssi": { "name": "Wi‑Fi-signalkvalitet" },
+      "ssid": { "name": "Wi‑Fi-nätverk" }
+    }
+  }
+}
