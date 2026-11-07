@@ -27,7 +27,7 @@ build-backend = "setuptools.build_meta"
 test = [
   "homeassistant>=2026.6.3",
   "pytest>=9.2.0",
-  "pytest-asyncio>=1.4.1",
+  "pytest-asyncio>=1.4.1.post1",
   "pytest-cov>=7.1.0",
 ]
 dev = [
