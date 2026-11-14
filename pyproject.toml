@@ -35,7 +35,7 @@ dev = [
   "codespell>=2.4.3",
   "isort>=9.0.2",
   "pre-commit>=4.7.0",
-  "ruff>=0.17.3",
+  "ruff>=0.17.4",
 ]
 
 [tool.ruff]
