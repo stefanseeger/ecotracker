@@ -388,6 +388,29 @@ def test_throttled_sensor_writes_immediately_on_availability_change():
     assert sensor.async_write_ha_state.call_count == 3
 
 
+def test_throttled_sensor_recovers_immediately_after_missing_value():
+    """Recovery from a missing value publishes immediately while subsequent valid updates stay throttled."""
+    coordinator = create_mock_coordinator({"energyCounterIn": 50000})
+    coordinator.last_update_success = True
+    sensor = EcotrackerEnergyInSensor(coordinator, create_mock_entry())
+    sensor.async_write_ha_state = MagicMock()
+
+    with patch("custom_components.ecotracker.sensor.time.monotonic", side_effect=[100.0, 101.0, 102.0, 103.0]):
+        # Initial valid value writes
+        sensor._handle_coordinator_update()
+        # Missing value writes immediately (availability stays True)
+        coordinator.data = {}
+        sensor._handle_coordinator_update()
+        # Recovery to valid value writes immediately despite elapsed < ENERGY_UPDATE_INTERVAL
+        coordinator.data = {"energyCounterIn": 50005}
+        sensor._handle_coordinator_update()
+        # Next valid value within throttle window is suppressed
+        coordinator.data = {"energyCounterIn": 50010}
+        sensor._handle_coordinator_update()
+
+    assert sensor.async_write_ha_state.call_count == 3
+
+
 def test_custom_configured_update_intervals_override_defaults():
     """Configured per-sensor intervals from entry.data override defaults (including 0 to disable throttling)."""
     coordinator = create_mock_coordinator({"energyCounterIn": 50000, "powerPhase1": 800})

@@ -15,7 +15,7 @@
         },
         "data_description": {
           "scan_interval": "Quanto spesso interrogare il dispositivo (1-86400 secondi)",
-          "power_threshold": "Variazione minima di potenza in watt prima dell'aggiornamento (0 = segnala ogni variazione, heartbeat max 30 s)",
+          "power_threshold": "Variazione minima di potenza in watt prima dell'aggiornamento (0 = segnala ogni variazione; altrimenti al primo polling riuscito dopo 30 s)",
           "phase_power_update_interval": "Intervallo minimo per potenza fase 1-3 in secondi (0 = uguale al polling)",
           "power_avg_update_interval": "Intervallo minimo per potenza media in secondi (0 = uguale al polling)",
           "energy_update_interval": "Intervallo minimo per contatori energia in secondi (0 = uguale al polling)",
@@ -36,7 +36,7 @@
         },
         "data_description": {
           "scan_interval": "Quanto spesso interrogare il dispositivo (1-86400 secondi)",
-          "power_threshold": "Variazione minima di potenza in watt prima dell'aggiornamento (0 = segnala ogni variazione, heartbeat max 30 s)",
+          "power_threshold": "Variazione minima di potenza in watt prima dell'aggiornamento (0 = segnala ogni variazione; altrimenti al primo polling riuscito dopo 30 s)",
           "phase_power_update_interval": "Intervallo minimo per potenza fase 1-3 in secondi (0 = uguale al polling)",
           "power_avg_update_interval": "Intervallo minimo per potenza media in secondi (0 = uguale al polling)",
           "energy_update_interval": "Intervallo minimo per contatori energia in secondi (0 = uguale al polling)",

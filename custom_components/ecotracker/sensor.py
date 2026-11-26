@@ -92,8 +92,14 @@ class EcotrackerSensorBase(CoordinatorEntity, SensorEntity):
         available = self.available
         value = self.native_value if available else None
 
-        # Always publish immediately on first update, availability transitions, or missing values.
-        if self._last_write is None or self._last_available != available or not available or value is None:
+        # Always publish immediately on first update, availability transitions, or missing/recovered values.
+        if (
+            self._last_write is None
+            or self._last_available != available
+            or not available
+            or value is None
+            or self._last_written_value is None
+        ):
             self._last_write = now
             self._last_written_value = value
             self._last_available = available

@@ -15,7 +15,7 @@
         },
         "data_description": {
           "scan_interval": "Fréquence de requête de l'appareil (1-86400 secondes)",
-          "power_threshold": "Variation minimale de puissance en watts avant mise à jour (0 = signaler chaque changement, battement max 30 s)",
+          "power_threshold": "Variation minimale de puissance en watts avant mise à jour (0 = signaler chaque changement ; sinon lors de la première interrogation réussie après 30 s)",
           "phase_power_update_interval": "Intervalle minimal pour puissance phase 1-3 en secondes (0 = intervalle d'interrogation)",
           "power_avg_update_interval": "Intervalle minimal pour puissance moyenne en secondes (0 = intervalle d'interrogation)",
           "energy_update_interval": "Intervalle minimal pour compteurs d'énergie en secondes (0 = intervalle d'interrogation)",
@@ -36,7 +36,7 @@
         },
         "data_description": {
           "scan_interval": "Fréquence de requête de l'appareil (1-86400 secondes)",
-          "power_threshold": "Variation minimale de puissance en watts avant mise à jour (0 = signaler chaque changement, battement max 30 s)",
+          "power_threshold": "Variation minimale de puissance en watts avant mise à jour (0 = signaler chaque changement ; sinon lors de la première interrogation réussie après 30 s)",
           "phase_power_update_interval": "Intervalle minimal pour puissance phase 1-3 en secondes (0 = intervalle d'interrogation)",
           "power_avg_update_interval": "Intervalle minimal pour puissance moyenne en secondes (0 = intervalle d'interrogation)",
           "energy_update_interval": "Intervalle minimal pour compteurs d'énergie en secondes (0 = intervalle d'interrogation)",

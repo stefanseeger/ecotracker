@@ -15,7 +15,7 @@
         },
         "data_description": {
           "scan_interval": "Com que frequência consultar o dispositivo (1-86400 segundos)",
-          "power_threshold": "Alteração mínima de potência em watts antes de atualizar o estado (0 = relatar cada alteração, máx. 30 s)",
+          "power_threshold": "Alteração mínima de potência em watts antes de atualizar o estado (0 = relatar cada alteração; caso contrário, na primeira consulta bem-sucedida após 30 s)",
           "phase_power_update_interval": "Intervalo mínimo para potência fase 1-3 em segundos (0 = igual à consulta)",
           "power_avg_update_interval": "Intervalo mínimo para potência média em segundos (0 = igual à consulta)",
           "energy_update_interval": "Intervalo mínimo para contadores de energia em segundos (0 = igual à consulta)",
@@ -36,7 +36,7 @@
         },
         "data_description": {
           "scan_interval": "Com que frequência consultar o dispositivo (1-86400 segundos)",
-          "power_threshold": "Alteração mínima de potência em watts antes de atualizar o estado (0 = relatar cada alteração, máx. 30 s)",
+          "power_threshold": "Alteração mínima de potência em watts antes de atualizar o estado (0 = relatar cada alteração; caso contrário, na primeira consulta bem-sucedida após 30 s)",
           "phase_power_update_interval": "Intervalo mínimo para potência fase 1-3 em segundos (0 = igual à consulta)",
           "power_avg_update_interval": "Intervalo mínimo para potência média em segundos (0 = igual à consulta)",
           "energy_update_interval": "Intervalo mínimo para contadores de energia em segundos (0 = igual à consulta)",

@@ -15,7 +15,7 @@
         },
         "data_description": {
           "scan_interval": "Jak często odpytywać urządzenie (1-86400 sekund)",
-          "power_threshold": "Minimalna zmiana mocy w watach przed aktualizacją stanu (0 = zgłaszaj każdą zmianę, maks. 30 s)",
+          "power_threshold": "Minimalna zmiana mocy w watach przed aktualizacją stanu (0 = zgłaszaj każdą zmianę; w przeciwnym razie przy pierwszym udanym odpytaniu po 30 s)",
           "phase_power_update_interval": "Minimalny interwał dla mocy faz 1-3 w sekundach (0 = interwał odpytywania)",
           "power_avg_update_interval": "Minimalny interwał dla średniej mocy w sekundach (0 = interwał odpytywania)",
           "energy_update_interval": "Minimalny interwał dla liczników energii w sekundach (0 = interwał odpytywania)",
@@ -36,7 +36,7 @@
         },
         "data_description": {
           "scan_interval": "Jak często odpytywać urządzenie (1-86400 sekund)",
-          "power_threshold": "Minimalna zmiana mocy w watach przed aktualizacją stanu (0 = zgłaszaj każdą zmianę, maks. 30 s)",
+          "power_threshold": "Minimalna zmiana mocy w watach przed aktualizacją stanu (0 = zgłaszaj każdą zmianę; w przeciwnym razie przy pierwszym udanym odpytaniu po 30 s)",
           "phase_power_update_interval": "Minimalny interwał dla mocy faz 1-3 w sekundach (0 = interwał odpytywania)",
           "power_avg_update_interval": "Minimalny interwał dla średniej mocy w sekundach (0 = interwał odpytywania)",
           "energy_update_interval": "Minimalny interwał dla liczników energii w sekundach (0 = interwał odpytywania)",

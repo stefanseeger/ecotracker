@@ -15,7 +15,7 @@
         },
         "data_description": {
           "scan_interval": "Wie oft das Gerät abgefragt werden soll (1-86400 Sekunden)",
-          "power_threshold": "Mindeständerung der Leistung in Watt vor einer Aktualisierung (0 = jede Änderung melden, max. 30 s Heartbeat)",
+          "power_threshold": "Mindeständerung der Leistung in Watt vor einer Aktualisierung (0 = jede Änderung melden; sonst bei der ersten erfolgreichen Abfrage nach 30 s)",
           "phase_power_update_interval": "Mindestintervall für Leistung Phase 1-3 in Sekunden (0 = Abfrageintervall)",
           "power_avg_update_interval": "Mindestintervall für Leistungsdurchschnitt in Sekunden (0 = Abfrageintervall)",
           "energy_update_interval": "Mindestintervall für Energiezähler in Sekunden (0 = Abfrageintervall)",
@@ -36,7 +36,7 @@
         },
         "data_description": {
           "scan_interval": "Wie oft das Gerät abgefragt werden soll (1-86400 Sekunden)",
-          "power_threshold": "Mindeständerung der Leistung in Watt vor einer Aktualisierung (0 = jede Änderung melden, max. 30 s Heartbeat)",
+          "power_threshold": "Mindeständerung der Leistung in Watt vor einer Aktualisierung (0 = jede Änderung melden; sonst bei der ersten erfolgreichen Abfrage nach 30 s)",
           "phase_power_update_interval": "Mindestintervall für Leistung Phase 1-3 in Sekunden (0 = Abfrageintervall)",
           "power_avg_update_interval": "Mindestintervall für Leistungsdurchschnitt in Sekunden (0 = Abfrageintervall)",
           "energy_update_interval": "Mindestintervall für Energiezähler in Sekunden (0 = Abfrageintervall)",

@@ -15,7 +15,7 @@
         },
         "data_description": {
           "scan_interval": "Hoe vaak het apparaat moet worden gescand (1-86400 seconden)",
-          "power_threshold": "Minimale vermogenswijziging in watt vóór statusupdate (0 = elke wijziging melden, max 30 s heartbeat)",
+          "power_threshold": "Minimale vermogenswijziging in watt vóór statusupdate (0 = elke wijziging melden; anders bij de eerste geslaagde peiling na 30 s)",
           "phase_power_update_interval": "Minimuminterval voor fase 1-3 vermogen in seconden (0 = gelijk aan pollinginterval)",
           "power_avg_update_interval": "Minimuminterval voor gemiddeld vermogen in seconden (0 = gelijk aan pollinginterval)",
           "energy_update_interval": "Minimuminterval voor energietellers in seconden (0 = gelijk aan pollinginterval)",
@@ -36,7 +36,7 @@
         },
         "data_description": {
           "scan_interval": "Hoe vaak het apparaat moet worden gescand (1-86400 seconden)",
-          "power_threshold": "Minimale vermogenswijziging in watt vóór statusupdate (0 = elke wijziging melden, max 30 s heartbeat)",
+          "power_threshold": "Minimale vermogenswijziging in watt vóór statusupdate (0 = elke wijziging melden; anders bij de eerste geslaagde peiling na 30 s)",
           "phase_power_update_interval": "Minimuminterval voor fase 1-3 vermogen in seconden (0 = gelijk aan pollinginterval)",
           "power_avg_update_interval": "Minimuminterval voor gemiddeld vermogen in seconden (0 = gelijk aan pollinginterval)",
           "energy_update_interval": "Minimuminterval voor energietellers in seconden (0 = gelijk aan pollinginterval)",

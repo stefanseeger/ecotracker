@@ -43,7 +43,7 @@ Custom integration for Ecotracker energy monitoring device. It directly accessed
 1. Search for "Ecotracker"
 1. Enter your device's IP address
 1. Set the polling interval (default: 60 seconds, range: 1-86400 seconds)
-1. Optionally set the **Power change threshold** in Watts (default: `0`, range: `0-1000`): suppresses small idle jitter below the threshold while still reporting larger changes immediately (with a maximum 30-second heartbeat)
+1. Optionally set the **Power change threshold** in Watts (default: `0`, range: `0-1000`): suppresses small idle jitter below the threshold while still reporting larger changes immediately (and publishes a heartbeat on the first successful poll after 30 seconds; depends on the polling interval)
 1. Optionally adjust per-sensor minimum update intervals (`0-86400` seconds, `0` = match polling interval):
    - Phase 1-3 power (default: `30 s`)
    - Power average (default: `60 s`)
@@ -84,7 +84,7 @@ To change the polling interval, power change threshold, per-sensor update interv
 
 When polling faster than a sensor's configured minimum update interval, state writes to Home Assistant are throttled to keep the database compact (set any interval to `0` to match the polling interval; availability changes are always reported immediately):
 
-- `sensor.ecotracker_power` - Current power consumption in Watts (updates at full polling interval; optional deadband with 30 s heartbeat)
+- `sensor.ecotracker_power` - Current power consumption in Watts (updates at full polling interval; optional deadband publishes on the first successful poll after 30 s)
 - `sensor.ecotracker_power_average` - Average power consumption (last minute, max once every 60 s)
 - `sensor.ecotracker_energy_in` - Total energy imported in Watt-hours (max once every 60 s)
 - `sensor.ecotracker_energy_in_t1` - Energy imported (1.8.1) in Watt-hours (max once every 60 s)
