@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 from homeassistant.data_entry_flow import AbortFlow
 
-from custom_components.ecotracker.config_flow import CannotConnect, ConfigFlow
+from custom_components.ecotracker.config_flow import STEP_USER_DATA_SCHEMA, CannotConnect, ConfigFlow
 from custom_components.ecotracker.const import (
     CONF_DIAGNOSTIC_UPDATE_INTERVAL,
     CONF_ENERGY_UPDATE_INTERVAL,
@@ -131,3 +133,24 @@ async def test_user_flow_shows_errors_and_can_recover(error, error_key):
     result = await flow.async_step_user(MOCK_ENTRY_DATA)
 
     assert result == {"type": "create_entry"}
+
+
+def test_translation_files_cover_user_and_reconfigure_steps():
+    """All translation files define every config flow field for both user and reconfigure steps."""
+    integration_dir = Path(__file__).resolve().parents[2] / "custom_components" / "ecotracker"
+    translation_files = [integration_dir / "strings.json", *sorted((integration_dir / "translations").glob("*.json"))]
+    expected_fields = {key.schema for key in STEP_USER_DATA_SCHEMA.schema}
+    expected_descriptions = expected_fields - {"ip_address"}
+
+    for translation_file in translation_files:
+        payload = json.loads(translation_file.read_text(encoding="utf-8"))
+        steps = payload["config"]["step"]
+        for step_id in ("user", "reconfigure"):
+            assert step_id in steps, f"{translation_file.name} missing config.step.{step_id}"
+            step = steps[step_id]
+            assert step.get("title"), f"{translation_file.name} missing {step_id}.title"
+            assert step.get("description"), f"{translation_file.name} missing {step_id}.description"
+            assert expected_fields <= set(step.get("data", {})), f"{translation_file.name} missing {step_id}.data keys"
+            assert expected_descriptions <= set(step.get("data_description", {})), (
+                f"{translation_file.name} missing {step_id}.data_description keys"
+            )

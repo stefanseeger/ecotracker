@@ -21,6 +21,27 @@
           "energy_update_interval": "Minsta intervall för energimätare i sekunder (0 = samma som pollingintervall)",
           "diagnostic_update_interval": "Minsta intervall för diagnossensorer (mätålder, Wi‑Fi-signal) i sekunder (0 = samma som pollingintervall)"
         }
+      },
+      "reconfigure": {
+        "title": "Konfigurera om Ecotracker",
+        "description": "Uppdatera inställningarna för din Ecotracker-enhet",
+        "data": {
+          "ip_address": "IP-adress",
+          "scan_interval": "Uppdateringsintervall",
+          "power_threshold": "Tröskelvärde för effektändring (W)",
+          "phase_power_update_interval": "Uppdateringsintervall faseffekt",
+          "power_avg_update_interval": "Uppdateringsintervall medeleffekt",
+          "energy_update_interval": "Uppdateringsintervall energimätare",
+          "diagnostic_update_interval": "Uppdateringsintervall diagnossensorer"
+        },
+        "data_description": {
+          "scan_interval": "Hur ofta enheten ska pollas (1-86400 sekunder)",
+          "power_threshold": "Minsta effektändring i watt innan nytt värde rapporteras (0 = rapportera varje ändring, max 30 s heartbeat)",
+          "phase_power_update_interval": "Minsta intervall för fas 1-3 effekt i sekunder (0 = samma som pollingintervall)",
+          "power_avg_update_interval": "Minsta intervall för medeleffekt i sekunder (0 = samma som pollingintervall)",
+          "energy_update_interval": "Minsta intervall för energimätare i sekunder (0 = samma som pollingintervall)",
+          "diagnostic_update_interval": "Minsta intervall för diagnossensorer (mätålder, Wi‑Fi-signal) i sekunder (0 = samma som pollingintervall)"
+        }
       }
     },
     "error": {

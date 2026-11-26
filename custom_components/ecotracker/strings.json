@@ -21,6 +21,27 @@
           "energy_update_interval": "Minimum interval between energy counter updates in seconds (0 = match polling interval)",
           "diagnostic_update_interval": "Minimum interval between diagnostic sensor updates (measurement age, Wi-Fi signal) in seconds (0 = match polling interval)"
         }
+      },
+      "reconfigure": {
+        "title": "Reconfigure Ecotracker",
+        "description": "Update your Ecotracker device settings",
+        "data": {
+          "ip_address": "IP address",
+          "scan_interval": "Polling interval",
+          "power_threshold": "Power change threshold (W)",
+          "phase_power_update_interval": "Phase power update interval",
+          "power_avg_update_interval": "Power average update interval",
+          "energy_update_interval": "Energy counters update interval",
+          "diagnostic_update_interval": "Diagnostic sensors update interval"
+        },
+        "data_description": {
+          "scan_interval": "How often to poll the device (1-86400 seconds)",
+          "power_threshold": "Minimum power change in watts before reporting a new state (0 = report every change, max 30s heartbeat)",
+          "phase_power_update_interval": "Minimum interval between phase 1-3 power updates in seconds (0 = match polling interval)",
+          "power_avg_update_interval": "Minimum interval between power average updates in seconds (0 = match polling interval)",
+          "energy_update_interval": "Minimum interval between energy counter updates in seconds (0 = match polling interval)",
+          "diagnostic_update_interval": "Minimum interval between diagnostic sensor updates (measurement age, Wi-Fi signal) in seconds (0 = match polling interval)"
+        }
       }
     },
     "error": {

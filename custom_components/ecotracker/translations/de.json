@@ -21,6 +21,27 @@
           "energy_update_interval": "Mindestintervall für Energiezähler in Sekunden (0 = Abfrageintervall)",
           "diagnostic_update_interval": "Mindestintervall für Diagnosesensoren (Messalter, Wi-Fi-Signal) in Sekunden (0 = Abfrageintervall)"
         }
+      },
+      "reconfigure": {
+        "title": "Ecotracker neu konfigurieren",
+        "description": "Aktualisiere die Einstellungen deines Ecotracker-Geräts",
+        "data": {
+          "ip_address": "IP-Adresse",
+          "scan_interval": "Abfrageintervall",
+          "power_threshold": "Schwellenwert Leistungsänderung (W)",
+          "phase_power_update_interval": "Aktualisierungsintervall Phasenleistung",
+          "power_avg_update_interval": "Aktualisierungsintervall Leistungsdurchschnitt",
+          "energy_update_interval": "Aktualisierungsintervall Energiezähler",
+          "diagnostic_update_interval": "Aktualisierungsintervall Diagnosesensoren"
+        },
+        "data_description": {
+          "scan_interval": "Wie oft das Gerät abgefragt werden soll (1-86400 Sekunden)",
+          "power_threshold": "Mindeständerung der Leistung in Watt vor einer Aktualisierung (0 = jede Änderung melden, max. 30 s Heartbeat)",
+          "phase_power_update_interval": "Mindestintervall für Leistung Phase 1-3 in Sekunden (0 = Abfrageintervall)",
+          "power_avg_update_interval": "Mindestintervall für Leistungsdurchschnitt in Sekunden (0 = Abfrageintervall)",
+          "energy_update_interval": "Mindestintervall für Energiezähler in Sekunden (0 = Abfrageintervall)",
+          "diagnostic_update_interval": "Mindestintervall für Diagnosesensoren (Messalter, Wi-Fi-Signal) in Sekunden (0 = Abfrageintervall)"
+        }
       }
     },
     "error": {
