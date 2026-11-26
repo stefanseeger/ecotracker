@@ -162,9 +162,7 @@ class EcotrackerPowerPhase1Sensor(EcotrackerSensorBase):
         self._attr_device_class = SensorDeviceClass.POWER
         self._attr_state_class = SensorStateClass.MEASUREMENT
         self._attr_native_unit_of_measurement = UnitOfPower.WATT
-        self._min_update_interval = float(
-            entry.data.get(CONF_PHASE_POWER_UPDATE_INTERVAL, PHASE_POWER_UPDATE_INTERVAL)
-        )
+        self._min_update_interval = float(entry.data.get(CONF_PHASE_POWER_UPDATE_INTERVAL, PHASE_POWER_UPDATE_INTERVAL))
 
     @property
     def native_value(self) -> int | None:
@@ -183,9 +181,7 @@ class EcotrackerPowerPhase2Sensor(EcotrackerSensorBase):
         self._attr_device_class = SensorDeviceClass.POWER
         self._attr_state_class = SensorStateClass.MEASUREMENT
         self._attr_native_unit_of_measurement = UnitOfPower.WATT
-        self._min_update_interval = float(
-            entry.data.get(CONF_PHASE_POWER_UPDATE_INTERVAL, PHASE_POWER_UPDATE_INTERVAL)
-        )
+        self._min_update_interval = float(entry.data.get(CONF_PHASE_POWER_UPDATE_INTERVAL, PHASE_POWER_UPDATE_INTERVAL))
 
     @property
     def native_value(self) -> int | None:
@@ -204,9 +200,7 @@ class EcotrackerPowerPhase3Sensor(EcotrackerSensorBase):
         self._attr_device_class = SensorDeviceClass.POWER
         self._attr_state_class = SensorStateClass.MEASUREMENT
         self._attr_native_unit_of_measurement = UnitOfPower.WATT
-        self._min_update_interval = float(
-            entry.data.get(CONF_PHASE_POWER_UPDATE_INTERVAL, PHASE_POWER_UPDATE_INTERVAL)
-        )
+        self._min_update_interval = float(entry.data.get(CONF_PHASE_POWER_UPDATE_INTERVAL, PHASE_POWER_UPDATE_INTERVAL))
 
     @property
     def native_value(self) -> int | None:
@@ -225,9 +219,7 @@ class EcotrackerPowerAvgSensor(EcotrackerSensorBase):
         self._attr_device_class = SensorDeviceClass.POWER
         self._attr_state_class = SensorStateClass.MEASUREMENT
         self._attr_native_unit_of_measurement = UnitOfPower.WATT
-        self._min_update_interval = float(
-            entry.data.get(CONF_POWER_AVG_UPDATE_INTERVAL, POWER_AVG_UPDATE_INTERVAL)
-        )
+        self._min_update_interval = float(entry.data.get(CONF_POWER_AVG_UPDATE_INTERVAL, POWER_AVG_UPDATE_INTERVAL))
 
     @property
     def native_value(self) -> int | None:
@@ -322,9 +314,7 @@ class EcotrackerAgePowerSensor(EcotrackerSensorBase):
         self._attr_entity_category = EntityCategory.DIAGNOSTIC
         self._attr_entity_registry_enabled_default = False
         self._attr_native_unit_of_measurement = "ms"
-        self._min_update_interval = float(
-            entry.data.get(CONF_DIAGNOSTIC_UPDATE_INTERVAL, DIAGNOSTIC_UPDATE_INTERVAL)
-        )
+        self._min_update_interval = float(entry.data.get(CONF_DIAGNOSTIC_UPDATE_INTERVAL, DIAGNOSTIC_UPDATE_INTERVAL))
 
     @property
     def native_value(self) -> int | None:
@@ -375,12 +365,8 @@ class EcotrackerRssiSensor(EcotrackerSensorBase):
         self._attr_unique_id = f"{entry.entry_id}_rssi"
         self._attr_entity_category = EntityCategory.DIAGNOSTIC
         self._attr_entity_registry_enabled_default = False
-        self._min_update_interval = float(
-            entry.data.get(CONF_DIAGNOSTIC_UPDATE_INTERVAL, DIAGNOSTIC_UPDATE_INTERVAL)
-        )
-        self._min_update_interval = float(
-            entry.data.get(CONF_DIAGNOSTIC_UPDATE_INTERVAL, DIAGNOSTIC_UPDATE_INTERVAL)
-        )
+        self._min_update_interval = float(entry.data.get(CONF_DIAGNOSTIC_UPDATE_INTERVAL, DIAGNOSTIC_UPDATE_INTERVAL))
+        self._min_update_interval = float(entry.data.get(CONF_DIAGNOSTIC_UPDATE_INTERVAL, DIAGNOSTIC_UPDATE_INTERVAL))
 
     @property
     def native_value(self) -> int | None:
