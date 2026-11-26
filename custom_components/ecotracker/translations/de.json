@@ -6,10 +6,12 @@
         "description": "Gib die Details deines Ecotracker-Geräts ein",
         "data": {
           "ip_address": "IP-Adresse",
-          "scan_interval": "Abfrageintervall"
+          "scan_interval": "Abfrageintervall",
+          "power_threshold": "Schwellenwert Leistungsänderung (W)"
         },
         "data_description": {
-          "scan_interval": "Wie oft das Gerät abgefragt werden soll (1-86400 Sekunden)"
+          "scan_interval": "Wie oft das Gerät abgefragt werden soll (1-86400 Sekunden)",
+          "power_threshold": "Mindeständerung der Leistung in Watt vor einer Aktualisierung (0 = jede Änderung melden, max. 30 s Heartbeat)"
         }
       }
     },

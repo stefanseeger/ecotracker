@@ -6,10 +6,12 @@
         "description": "Wprowadź dane urządzenia Ecotracker",
         "data": {
           "ip_address": "Adres IP",
-          "scan_interval": "Interwał odpytywania"
+          "scan_interval": "Interwał odpytywania",
+          "power_threshold": "Próg zmiany mocy (W)"
         },
         "data_description": {
-          "scan_interval": "Jak często odpytywać urządzenie (1-86400 sekund)"
+          "scan_interval": "Jak często odpytywać urządzenie (1-86400 sekund)",
+          "power_threshold": "Minimalna zmiana mocy w watach przed aktualizacją stanu (0 = zgłaszaj każdą zmianę, maks. 30 s)"
         }
       }
     },

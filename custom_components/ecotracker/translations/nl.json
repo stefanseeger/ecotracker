@@ -6,10 +6,12 @@
         "description": "Voer de details van uw Ecotracker-apparaat in",
         "data": {
           "ip_address": "IP-adres",
-          "scan_interval": "Pollinginterval"
+          "scan_interval": "Pollinginterval",
+          "power_threshold": "Drempel vermogenswijziging (W)"
         },
         "data_description": {
-          "scan_interval": "Hoe vaak het apparaat moet worden gescand (1-86400 seconden)"
+          "scan_interval": "Hoe vaak het apparaat moet worden gescand (1-86400 seconden)",
+          "power_threshold": "Minimale vermogenswijziging in watt vóór statusupdate (0 = elke wijziging melden, max 30 s heartbeat)"
         }
       }
     },

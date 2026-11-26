@@ -6,10 +6,12 @@
         "description": "Inserisci i dettagli del tuo dispositivo Ecotracker",
         "data": {
           "ip_address": "Indirizzo IP",
-          "scan_interval": "Intervallo di polling"
+          "scan_interval": "Intervallo di polling",
+          "power_threshold": "Soglia variazione potenza (W)"
         },
         "data_description": {
-          "scan_interval": "Quanto spesso interrogare il dispositivo (1-86400 secondi)"
+          "scan_interval": "Quanto spesso interrogare il dispositivo (1-86400 secondi)",
+          "power_threshold": "Variazione minima di potenza in watt prima dell'aggiornamento (0 = segnala ogni variazione, heartbeat max 30 s)"
         }
       }
     },

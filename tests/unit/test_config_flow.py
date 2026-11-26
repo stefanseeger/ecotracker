@@ -8,7 +8,11 @@ import pytest
 from homeassistant.data_entry_flow import AbortFlow
 
 from custom_components.ecotracker.config_flow import CannotConnect, ConfigFlow
-from custom_components.ecotracker.const import CONF_SCAN_INTERVAL
+from custom_components.ecotracker.const import (
+    CONF_POWER_THRESHOLD,
+    CONF_SCAN_INTERVAL,
+    DEFAULT_POWER_THRESHOLD,
+)
 from custom_components.ecotracker.coordinator import InvalidData
 from tests.mock_data import MOCK_ENTRY_DATA
 
@@ -49,7 +53,7 @@ async def test_user_flow_aborts_duplicate_before_validating():
 
 
 async def test_reconfigure_form_defaults_to_current_entry_data():
-    """The reconfigure form is prefilled with the saved IP and interval."""
+    """The reconfigure form is prefilled with the saved IP, interval, and power threshold."""
     flow = create_flow()
     entry = MagicMock(data={"ip_address": "192.168.1.42", CONF_SCAN_INTERVAL: 30})
     flow._get_reconfigure_entry = MagicMock(return_value=entry)
@@ -58,7 +62,11 @@ async def test_reconfigure_form_defaults_to_current_entry_data():
 
     assert result == {"type": "form"}
     data_schema = flow.async_show_form.call_args.kwargs["data_schema"]
-    assert data_schema({}) == {"ip_address": "192.168.1.42", CONF_SCAN_INTERVAL: 30}
+    assert data_schema({}) == {
+        "ip_address": "192.168.1.42",
+        CONF_SCAN_INTERVAL: 30,
+        CONF_POWER_THRESHOLD: DEFAULT_POWER_THRESHOLD,
+    }
 
 
 async def test_reconfigure_form_preserves_submitted_data_after_error():
@@ -67,7 +75,11 @@ async def test_reconfigure_form_preserves_submitted_data_after_error():
     entry = MagicMock(data={"ip_address": "192.168.1.42", CONF_SCAN_INTERVAL: 30})
     flow._get_reconfigure_entry = MagicMock(return_value=entry)
     flow.validate_input = AsyncMock(side_effect=CannotConnect("offline"))
-    user_input = {"ip_address": "192.168.1.99", CONF_SCAN_INTERVAL: 45}
+    user_input = {
+        "ip_address": "192.168.1.99",
+        CONF_SCAN_INTERVAL: 45,
+        CONF_POWER_THRESHOLD: 10,
+    }
 
     result = await flow.async_step_reconfigure(user_input)
 

@@ -14,7 +14,9 @@ from homeassistant.helpers.update_coordinator import UpdateFailed
 
 from .const import (
     API_ENDPOINT,
+    CONF_POWER_THRESHOLD,
     CONF_SCAN_INTERVAL,
+    DEFAULT_POWER_THRESHOLD,
     DEFAULT_SCAN_INTERVAL,
     DOMAIN,
 )
@@ -27,6 +29,9 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
         vol.Required(CONF_IP_ADDRESS): str,
         vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): vol.All(
             vol.Coerce(int), vol.Range(min=1, max=86400)
+        ),
+        vol.Optional(CONF_POWER_THRESHOLD, default=DEFAULT_POWER_THRESHOLD): vol.All(
+            vol.Coerce(int), vol.Range(min=0, max=1000)
         ),
     }
 )
@@ -94,6 +99,13 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                         entry.data.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
                     ),
                 ): vol.All(vol.Coerce(int), vol.Range(min=1, max=86400)),
+                vol.Optional(
+                    CONF_POWER_THRESHOLD,
+                    default=form_data.get(
+                        CONF_POWER_THRESHOLD,
+                        entry.data.get(CONF_POWER_THRESHOLD, DEFAULT_POWER_THRESHOLD),
+                    ),
+                ): vol.All(vol.Coerce(int), vol.Range(min=0, max=1000)),
             }
         )
         return self.async_show_form(step_id="reconfigure", data_schema=data_schema, errors=errors)

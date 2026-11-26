@@ -6,10 +6,12 @@
         "description": "Introduce los datos de tu dispositivo Ecotracker",
         "data": {
           "ip_address": "Dirección IP",
-          "scan_interval": "Intervalo de sondeo"
+          "scan_interval": "Intervalo de sondeo",
+          "power_threshold": "Umbral de cambio de potencia (W)"
         },
         "data_description": {
-          "scan_interval": "Con qué frecuencia consultar el dispositivo (1-86400 segundos)"
+          "scan_interval": "Con qué frecuencia consultar el dispositivo (1-86400 segundos)",
+          "power_threshold": "Cambio mínimo de potencia en vatios antes de actualizar el estado (0 = informar cada cambio, latido máx. 30 s)"
         }
       }
     },
