@@ -2,11 +2,22 @@
 
 from __future__ import annotations
 
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 from homeassistant.const import EntityCategory, UnitOfEnergy, UnitOfPower, UnitOfTime
 
-from custom_components.ecotracker.const import CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL, DOMAIN
+from custom_components.ecotracker.const import (
+    CONF_ENERGY_UPDATE_INTERVAL,
+    CONF_PHASE_POWER_UPDATE_INTERVAL,
+    CONF_POWER_THRESHOLD,
+    CONF_SCAN_INTERVAL,
+    DEFAULT_POWER_HEARTBEAT_INTERVAL,
+    DEFAULT_SCAN_INTERVAL,
+    DIAGNOSTIC_UPDATE_INTERVAL,
+    DOMAIN,
+    ENERGY_UPDATE_INTERVAL,
+    PHASE_POWER_UPDATE_INTERVAL,
+)
 from custom_components.ecotracker.sensor import (
     EcotrackerAgePowerSensor,
     EcotrackerEnergyInSensor,
@@ -198,6 +209,8 @@ def test_age_power_sensor_properties():
     assert sensor.unique_id == f"{TEST_ENTRY_ID}_age_power"
     assert sensor.translation_key == "age_power"
     assert sensor.entity_category == EntityCategory.DIAGNOSTIC
+    assert sensor.entity_registry_enabled_default is False
+    assert sensor.state_class is None
 
 
 def test_age_power_sensor_no_value():
@@ -247,6 +260,7 @@ def test_rssi_diagnostic_sensor():
 
     assert sensor.native_value == -50
     assert sensor.entity_category == EntityCategory.DIAGNOSTIC
+    assert sensor.entity_registry_enabled_default is False
     assert sensor.unique_id == f"{TEST_ENTRY_ID}_rssi"
     assert missing_sensor.native_value is None
 
@@ -261,3 +275,162 @@ def test_ssid_diagnostic_sensor():
     assert sensor.entity_category == EntityCategory.DIAGNOSTIC
     assert sensor.unique_id == f"{TEST_ENTRY_ID}_ssid"
     assert missing_sensor.native_value is None
+
+
+def test_energy_sensor_throttles_frequent_updates():
+    """Energy sensors write at most once per ENERGY_UPDATE_INTERVAL."""
+    coordinator = create_mock_coordinator({"energyCounterIn": 50000})
+    coordinator.last_update_success = True
+    sensor = EcotrackerEnergyInSensor(coordinator, create_mock_entry())
+    sensor.async_write_ha_state = MagicMock()
+
+    with patch("custom_components.ecotracker.sensor.time.monotonic", side_effect=[100.0, 101.0, 159.0, 160.0]):
+        sensor._handle_coordinator_update()
+        coordinator.data = {"energyCounterIn": 50001}
+        sensor._handle_coordinator_update()
+        coordinator.data = {"energyCounterIn": 50002}
+        sensor._handle_coordinator_update()
+        coordinator.data = {"energyCounterIn": 50003}
+        sensor._handle_coordinator_update()
+
+    assert ENERGY_UPDATE_INTERVAL == 60.0
+    assert sensor.async_write_ha_state.call_count == 2
+
+
+def test_phase_and_rssi_sensors_throttle_updates():
+    """Phase power and RSSI sensors throttle state writes to their configured intervals."""
+    coordinator = create_mock_coordinator({"powerPhase1": 800, "rssi": -50})
+    coordinator.last_update_success = True
+    entry = create_mock_entry()
+
+    phase_sensor = EcotrackerPowerPhase1Sensor(coordinator, entry)
+    phase_sensor.async_write_ha_state = MagicMock()
+    with patch(
+        "custom_components.ecotracker.sensor.time.monotonic",
+        side_effect=[10.0, 10.0 + PHASE_POWER_UPDATE_INTERVAL - 1, 10.0 + PHASE_POWER_UPDATE_INTERVAL],
+    ):
+        phase_sensor._handle_coordinator_update()
+        phase_sensor._handle_coordinator_update()
+        phase_sensor._handle_coordinator_update()
+    assert phase_sensor.async_write_ha_state.call_count == 2
+
+    rssi_sensor = EcotrackerRssiSensor(coordinator, entry)
+    rssi_sensor.async_write_ha_state = MagicMock()
+    with patch(
+        "custom_components.ecotracker.sensor.time.monotonic",
+        side_effect=[10.0, 10.0 + DIAGNOSTIC_UPDATE_INTERVAL - 1, 10.0 + DIAGNOSTIC_UPDATE_INTERVAL],
+    ):
+        rssi_sensor._handle_coordinator_update()
+        rssi_sensor._handle_coordinator_update()
+        rssi_sensor._handle_coordinator_update()
+    assert rssi_sensor.async_write_ha_state.call_count == 2
+
+
+def test_power_sensor_deadband_suppresses_jitter_and_keeps_fast_steps():
+    """Power deadband filters small jitter, reports large steps immediately, and refreshes on heartbeat."""
+    coordinator = create_mock_coordinator({"power": 250})
+    coordinator.last_update_success = True
+    entry = create_mock_entry()
+    entry.data[CONF_POWER_THRESHOLD] = 5
+    sensor = EcotrackerPowerSensor(coordinator, entry)
+    sensor.async_write_ha_state = MagicMock()
+
+    with patch(
+        "custom_components.ecotracker.sensor.time.monotonic",
+        side_effect=[100.0, 101.0, 102.0, 102.0 + DEFAULT_POWER_HEARTBEAT_INTERVAL],
+    ):
+        # First update always writes
+        sensor._handle_coordinator_update()
+        # Small +3 W jitter (< 5 W) is suppressed
+        coordinator.data = {"power": 253}
+        sensor._handle_coordinator_update()
+        # Large +1000 W step (>= 5 W) writes immediately
+        coordinator.data = {"power": 1250}
+        sensor._handle_coordinator_update()
+        # Small +2 W jitter after heartbeat (>= 30 s) writes
+        coordinator.data = {"power": 1252}
+        sensor._handle_coordinator_update()
+
+    assert sensor.async_write_ha_state.call_count == 3
+
+
+def test_power_sensor_default_threshold_writes_every_update():
+    """With default power_threshold=0, every power update writes immediately."""
+    coordinator = create_mock_coordinator({"power": 250})
+    coordinator.last_update_success = True
+    sensor = EcotrackerPowerSensor(coordinator, create_mock_entry())
+    sensor.async_write_ha_state = MagicMock()
+
+    with patch("custom_components.ecotracker.sensor.time.monotonic", side_effect=[100.0, 101.0, 102.0]):
+        sensor._handle_coordinator_update()
+        coordinator.data = {"power": 251}
+        sensor._handle_coordinator_update()
+        coordinator.data = {"power": 252}
+        sensor._handle_coordinator_update()
+
+    assert sensor.async_write_ha_state.call_count == 3
+
+
+def test_throttled_sensor_writes_immediately_on_availability_change():
+    """Availability drops and recoveries bypass throttling."""
+    coordinator = create_mock_coordinator({"energyCounterIn": 50000})
+    coordinator.last_update_success = True
+    sensor = EcotrackerEnergyInSensor(coordinator, create_mock_entry())
+    sensor.async_write_ha_state = MagicMock()
+
+    with patch("custom_components.ecotracker.sensor.time.monotonic", side_effect=[100.0, 101.0, 102.0]):
+        sensor._handle_coordinator_update()
+        coordinator.last_update_success = False
+        sensor._handle_coordinator_update()
+        coordinator.last_update_success = True
+        sensor._handle_coordinator_update()
+
+    assert sensor.async_write_ha_state.call_count == 3
+
+
+def test_throttled_sensor_recovers_immediately_after_missing_value():
+    """Recovery from a missing value publishes immediately while subsequent valid updates stay throttled."""
+    coordinator = create_mock_coordinator({"energyCounterIn": 50000})
+    coordinator.last_update_success = True
+    sensor = EcotrackerEnergyInSensor(coordinator, create_mock_entry())
+    sensor.async_write_ha_state = MagicMock()
+
+    with patch("custom_components.ecotracker.sensor.time.monotonic", side_effect=[100.0, 101.0, 102.0, 103.0]):
+        # Initial valid value writes
+        sensor._handle_coordinator_update()
+        # Missing value writes immediately (availability stays True)
+        coordinator.data = {}
+        sensor._handle_coordinator_update()
+        # Recovery to valid value writes immediately despite elapsed < ENERGY_UPDATE_INTERVAL
+        coordinator.data = {"energyCounterIn": 50005}
+        sensor._handle_coordinator_update()
+        # Next valid value within throttle window is suppressed
+        coordinator.data = {"energyCounterIn": 50010}
+        sensor._handle_coordinator_update()
+
+    assert sensor.async_write_ha_state.call_count == 3
+
+
+def test_custom_configured_update_intervals_override_defaults():
+    """Configured per-sensor intervals from entry.data override defaults (including 0 to disable throttling)."""
+    coordinator = create_mock_coordinator({"energyCounterIn": 50000, "powerPhase1": 800})
+    coordinator.last_update_success = True
+    entry = create_mock_entry()
+    entry.data[CONF_ENERGY_UPDATE_INTERVAL] = 10
+    entry.data[CONF_PHASE_POWER_UPDATE_INTERVAL] = 0
+
+    energy_sensor = EcotrackerEnergyInSensor(coordinator, entry)
+    energy_sensor.async_write_ha_state = MagicMock()
+    with patch("custom_components.ecotracker.sensor.time.monotonic", side_effect=[100.0, 105.0, 110.0]):
+        energy_sensor._handle_coordinator_update()
+        energy_sensor._handle_coordinator_update()
+        energy_sensor._handle_coordinator_update()
+    assert energy_sensor.async_write_ha_state.call_count == 2
+
+    phase_sensor = EcotrackerPowerPhase1Sensor(coordinator, entry)
+    phase_sensor.async_write_ha_state = MagicMock()
+    with patch("custom_components.ecotracker.sensor.time.monotonic", side_effect=[100.0, 101.0, 102.0]):
+        phase_sensor._handle_coordinator_update()
+        phase_sensor._handle_coordinator_update()
+        phase_sensor._handle_coordinator_update()
+    assert phase_sensor.async_write_ha_state.call_count == 3

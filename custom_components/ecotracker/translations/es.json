@@ -6,10 +6,41 @@
         "description": "Introduce los datos de tu dispositivo Ecotracker",
         "data": {
           "ip_address": "Dirección IP",
-          "scan_interval": "Intervalo de sondeo"
+          "scan_interval": "Intervalo de sondeo",
+          "power_threshold": "Umbral de cambio de potencia (W)",
+          "phase_power_update_interval": "Intervalo de potencia por fase",
+          "power_avg_update_interval": "Intervalo de potencia media",
+          "energy_update_interval": "Intervalo de contadores de energía",
+          "diagnostic_update_interval": "Intervalo de sensores de diagnóstico"
         },
         "data_description": {
-          "scan_interval": "Con qué frecuencia consultar el dispositivo (1-86400 segundos)"
+          "scan_interval": "Con qué frecuencia consultar el dispositivo (1-86400 segundos)",
+          "power_threshold": "Cambio mínimo de potencia en vatios antes de actualizar el estado (0 = informar cada cambio; de lo contrario, en la primera consulta exitosa tras 30 s)",
+          "phase_power_update_interval": "Intervalo mínimo para potencia fase 1-3 en segundos (0 = igual al sondeo)",
+          "power_avg_update_interval": "Intervalo mínimo para potencia media en segundos (0 = igual al sondeo)",
+          "energy_update_interval": "Intervalo mínimo para contadores de energía en segundos (0 = igual al sondeo)",
+          "diagnostic_update_interval": "Intervalo mínimo para sensores de diagnóstico (antigüedad, señal Wi‑Fi) en segundos (0 = igual al sondeo)"
+        }
+      },
+      "reconfigure": {
+        "title": "Reconfigurar Ecotracker",
+        "description": "Actualiza la configuración de tu dispositivo Ecotracker",
+        "data": {
+          "ip_address": "Dirección IP",
+          "scan_interval": "Intervalo de sondeo",
+          "power_threshold": "Umbral de cambio de potencia (W)",
+          "phase_power_update_interval": "Intervalo de potencia por fase",
+          "power_avg_update_interval": "Intervalo de potencia media",
+          "energy_update_interval": "Intervalo de contadores de energía",
+          "diagnostic_update_interval": "Intervalo de sensores de diagnóstico"
+        },
+        "data_description": {
+          "scan_interval": "Con qué frecuencia consultar el dispositivo (1-86400 segundos)",
+          "power_threshold": "Cambio mínimo de potencia en vatios antes de actualizar el estado (0 = informar cada cambio; de lo contrario, en la primera consulta exitosa tras 30 s)",
+          "phase_power_update_interval": "Intervalo mínimo para potencia fase 1-3 en segundos (0 = igual al sondeo)",
+          "power_avg_update_interval": "Intervalo mínimo para potencia media en segundos (0 = igual al sondeo)",
+          "energy_update_interval": "Intervalo mínimo para contadores de energía en segundos (0 = igual al sondeo)",
+          "diagnostic_update_interval": "Intervalo mínimo para sensores de diagnóstico (antigüedad, señal Wi‑Fi) en segundos (0 = igual al sondeo)"
         }
       }
     },

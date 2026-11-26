@@ -14,22 +14,65 @@ from homeassistant.helpers.update_coordinator import UpdateFailed
 
 from .const import (
     API_ENDPOINT,
+    CONF_DIAGNOSTIC_UPDATE_INTERVAL,
+    CONF_ENERGY_UPDATE_INTERVAL,
+    CONF_PHASE_POWER_UPDATE_INTERVAL,
+    CONF_POWER_AVG_UPDATE_INTERVAL,
+    CONF_POWER_THRESHOLD,
     CONF_SCAN_INTERVAL,
+    DEFAULT_POWER_THRESHOLD,
     DEFAULT_SCAN_INTERVAL,
+    DIAGNOSTIC_UPDATE_INTERVAL,
     DOMAIN,
+    ENERGY_UPDATE_INTERVAL,
+    PHASE_POWER_UPDATE_INTERVAL,
+    POWER_AVG_UPDATE_INTERVAL,
 )
 from .coordinator import InvalidData, fetch_data_with_retry
 
 _LOGGER = logging.getLogger(__name__)
 
-STEP_USER_DATA_SCHEMA = vol.Schema(
-    {
-        vol.Required(CONF_IP_ADDRESS): str,
-        vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): vol.All(
-            vol.Coerce(int), vol.Range(min=1, max=86400)
-        ),
-    }
-)
+
+def _build_config_schema(defaults: dict[str, Any] | None = None) -> vol.Schema:
+    """Build config/reconfigure schema with optional default values."""
+    values = defaults or {}
+    ip_field = (
+        vol.Required(CONF_IP_ADDRESS, default=values[CONF_IP_ADDRESS])
+        if CONF_IP_ADDRESS in values
+        else vol.Required(CONF_IP_ADDRESS)
+    )
+    return vol.Schema(
+        {
+            ip_field: str,
+            vol.Optional(
+                CONF_SCAN_INTERVAL,
+                default=values.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
+            ): vol.All(vol.Coerce(int), vol.Range(min=1, max=86400)),
+            vol.Optional(
+                CONF_POWER_THRESHOLD,
+                default=values.get(CONF_POWER_THRESHOLD, DEFAULT_POWER_THRESHOLD),
+            ): vol.All(vol.Coerce(int), vol.Range(min=0, max=1000)),
+            vol.Optional(
+                CONF_PHASE_POWER_UPDATE_INTERVAL,
+                default=values.get(CONF_PHASE_POWER_UPDATE_INTERVAL, PHASE_POWER_UPDATE_INTERVAL),
+            ): vol.All(vol.Coerce(int), vol.Range(min=0, max=86400)),
+            vol.Optional(
+                CONF_POWER_AVG_UPDATE_INTERVAL,
+                default=values.get(CONF_POWER_AVG_UPDATE_INTERVAL, POWER_AVG_UPDATE_INTERVAL),
+            ): vol.All(vol.Coerce(int), vol.Range(min=0, max=86400)),
+            vol.Optional(
+                CONF_ENERGY_UPDATE_INTERVAL,
+                default=values.get(CONF_ENERGY_UPDATE_INTERVAL, ENERGY_UPDATE_INTERVAL),
+            ): vol.All(vol.Coerce(int), vol.Range(min=0, max=86400)),
+            vol.Optional(
+                CONF_DIAGNOSTIC_UPDATE_INTERVAL,
+                default=values.get(CONF_DIAGNOSTIC_UPDATE_INTERVAL, DIAGNOSTIC_UPDATE_INTERVAL),
+            ): vol.All(vol.Coerce(int), vol.Range(min=0, max=86400)),
+        }
+    )
+
+
+STEP_USER_DATA_SCHEMA = _build_config_schema()
 
 
 class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
@@ -81,21 +124,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 )
 
         form_data = user_input if user_input is not None else entry.data
-        data_schema = vol.Schema(
-            {
-                vol.Required(
-                    CONF_IP_ADDRESS,
-                    default=form_data.get(CONF_IP_ADDRESS, entry.data[CONF_IP_ADDRESS]),
-                ): str,
-                vol.Optional(
-                    CONF_SCAN_INTERVAL,
-                    default=form_data.get(
-                        CONF_SCAN_INTERVAL,
-                        entry.data.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
-                    ),
-                ): vol.All(vol.Coerce(int), vol.Range(min=1, max=86400)),
-            }
-        )
+        data_schema = _build_config_schema({**entry.data, **form_data})
         return self.async_show_form(step_id="reconfigure", data_schema=data_schema, errors=errors)
 
     async def validate_input(self, data: dict[str, Any]) -> dict[str, Any]:
