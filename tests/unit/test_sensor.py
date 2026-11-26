@@ -7,14 +7,16 @@ from unittest.mock import MagicMock, patch
 from homeassistant.const import EntityCategory, UnitOfEnergy, UnitOfPower, UnitOfTime
 
 from custom_components.ecotracker.const import (
+    CONF_ENERGY_UPDATE_INTERVAL,
+    CONF_PHASE_POWER_UPDATE_INTERVAL,
     CONF_POWER_THRESHOLD,
     CONF_SCAN_INTERVAL,
     DEFAULT_POWER_HEARTBEAT_INTERVAL,
     DEFAULT_SCAN_INTERVAL,
+    DIAGNOSTIC_UPDATE_INTERVAL,
     DOMAIN,
     ENERGY_UPDATE_INTERVAL,
     PHASE_POWER_UPDATE_INTERVAL,
-    RSSI_UPDATE_INTERVAL,
 )
 from custom_components.ecotracker.sensor import (
     EcotrackerAgePowerSensor,
@@ -316,7 +318,7 @@ def test_phase_and_rssi_sensors_throttle_updates():
     rssi_sensor.async_write_ha_state = MagicMock()
     with patch(
         "custom_components.ecotracker.sensor.time.monotonic",
-        side_effect=[10.0, 10.0 + RSSI_UPDATE_INTERVAL - 1, 10.0 + RSSI_UPDATE_INTERVAL],
+        side_effect=[10.0, 10.0 + DIAGNOSTIC_UPDATE_INTERVAL - 1, 10.0 + DIAGNOSTIC_UPDATE_INTERVAL],
     ):
         rssi_sensor._handle_coordinator_update()
         rssi_sensor._handle_coordinator_update()
@@ -384,3 +386,28 @@ def test_throttled_sensor_writes_immediately_on_availability_change():
         sensor._handle_coordinator_update()
 
     assert sensor.async_write_ha_state.call_count == 3
+
+
+def test_custom_configured_update_intervals_override_defaults():
+    """Configured per-sensor intervals from entry.data override defaults (including 0 to disable throttling)."""
+    coordinator = create_mock_coordinator({"energyCounterIn": 50000, "powerPhase1": 800})
+    coordinator.last_update_success = True
+    entry = create_mock_entry()
+    entry.data[CONF_ENERGY_UPDATE_INTERVAL] = 10
+    entry.data[CONF_PHASE_POWER_UPDATE_INTERVAL] = 0
+
+    energy_sensor = EcotrackerEnergyInSensor(coordinator, entry)
+    energy_sensor.async_write_ha_state = MagicMock()
+    with patch("custom_components.ecotracker.sensor.time.monotonic", side_effect=[100.0, 105.0, 110.0]):
+        energy_sensor._handle_coordinator_update()
+        energy_sensor._handle_coordinator_update()
+        energy_sensor._handle_coordinator_update()
+    assert energy_sensor.async_write_ha_state.call_count == 2
+
+    phase_sensor = EcotrackerPowerPhase1Sensor(coordinator, entry)
+    phase_sensor.async_write_ha_state = MagicMock()
+    with patch("custom_components.ecotracker.sensor.time.monotonic", side_effect=[100.0, 101.0, 102.0]):
+        phase_sensor._handle_coordinator_update()
+        phase_sensor._handle_coordinator_update()
+        phase_sensor._handle_coordinator_update()
+    assert phase_sensor.async_write_ha_state.call_count == 3

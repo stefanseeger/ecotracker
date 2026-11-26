@@ -7,11 +7,19 @@
         "data": {
           "ip_address": "Adres IP",
           "scan_interval": "Interwał odpytywania",
-          "power_threshold": "Próg zmiany mocy (W)"
+          "power_threshold": "Próg zmiany mocy (W)",
+          "phase_power_update_interval": "Interwał aktualizacji mocy faz",
+          "power_avg_update_interval": "Interwał aktualizacji średniej mocy",
+          "energy_update_interval": "Interwał aktualizacji liczników energii",
+          "diagnostic_update_interval": "Interwał aktualizacji czujników diagnostycznych"
         },
         "data_description": {
           "scan_interval": "Jak często odpytywać urządzenie (1-86400 sekund)",
-          "power_threshold": "Minimalna zmiana mocy w watach przed aktualizacją stanu (0 = zgłaszaj każdą zmianę, maks. 30 s)"
+          "power_threshold": "Minimalna zmiana mocy w watach przed aktualizacją stanu (0 = zgłaszaj każdą zmianę, maks. 30 s)",
+          "phase_power_update_interval": "Minimalny interwał dla mocy faz 1-3 w sekundach (0 = interwał odpytywania)",
+          "power_avg_update_interval": "Minimalny interwał dla średniej mocy w sekundach (0 = interwał odpytywania)",
+          "energy_update_interval": "Minimalny interwał dla liczników energii w sekundach (0 = interwał odpytywania)",
+          "diagnostic_update_interval": "Minimalny interwał dla czujników diagnostycznych (wiek pomiaru, sygnał Wi‑Fi) w sekundach (0 = interwał odpytywania)"
         }
       }
     },

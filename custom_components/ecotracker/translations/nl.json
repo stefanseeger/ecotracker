@@ -7,11 +7,19 @@
         "data": {
           "ip_address": "IP-adres",
           "scan_interval": "Pollinginterval",
-          "power_threshold": "Drempel vermogenswijziging (W)"
+          "power_threshold": "Drempel vermogenswijziging (W)",
+          "phase_power_update_interval": "Update-interval fasevermogen",
+          "power_avg_update_interval": "Update-interval gemiddeld vermogen",
+          "energy_update_interval": "Update-interval energietellers",
+          "diagnostic_update_interval": "Update-interval diagnosesensoren"
         },
         "data_description": {
           "scan_interval": "Hoe vaak het apparaat moet worden gescand (1-86400 seconden)",
-          "power_threshold": "Minimale vermogenswijziging in watt vóór statusupdate (0 = elke wijziging melden, max 30 s heartbeat)"
+          "power_threshold": "Minimale vermogenswijziging in watt vóór statusupdate (0 = elke wijziging melden, max 30 s heartbeat)",
+          "phase_power_update_interval": "Minimuminterval voor fase 1-3 vermogen in seconden (0 = gelijk aan pollinginterval)",
+          "power_avg_update_interval": "Minimuminterval voor gemiddeld vermogen in seconden (0 = gelijk aan pollinginterval)",
+          "energy_update_interval": "Minimuminterval voor energietellers in seconden (0 = gelijk aan pollinginterval)",
+          "diagnostic_update_interval": "Minimuminterval voor diagnosesensoren (meetleeftijd, Wi‑Fi-signaal) in seconden (0 = gelijk aan pollinginterval)"
         }
       }
     },

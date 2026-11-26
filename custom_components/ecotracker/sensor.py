@@ -25,6 +25,10 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from . import EcotrackerConfigEntry
 from .const import (
+    CONF_DIAGNOSTIC_UPDATE_INTERVAL,
+    CONF_ENERGY_UPDATE_INTERVAL,
+    CONF_PHASE_POWER_UPDATE_INTERVAL,
+    CONF_POWER_AVG_UPDATE_INTERVAL,
     CONF_POWER_THRESHOLD,
     CONF_SCAN_INTERVAL,
     DEFAULT_POWER_HEARTBEAT_INTERVAL,
@@ -35,7 +39,6 @@ from .const import (
     ENERGY_UPDATE_INTERVAL,
     PHASE_POWER_UPDATE_INTERVAL,
     POWER_AVG_UPDATE_INTERVAL,
-    RSSI_UPDATE_INTERVAL,
 )
 from .coordinator import EcotrackerCoordinator
 
@@ -151,8 +154,6 @@ class EcotrackerPowerSensor(EcotrackerSensorBase):
 class EcotrackerPowerPhase1Sensor(EcotrackerSensorBase):
     """Representation of Ecotracker Power Phase 1 Sensor."""
 
-    _min_update_interval = PHASE_POWER_UPDATE_INTERVAL
-
     def __init__(self, coordinator: EcotrackerCoordinator, entry: EcotrackerConfigEntry) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator, entry)
@@ -161,6 +162,9 @@ class EcotrackerPowerPhase1Sensor(EcotrackerSensorBase):
         self._attr_device_class = SensorDeviceClass.POWER
         self._attr_state_class = SensorStateClass.MEASUREMENT
         self._attr_native_unit_of_measurement = UnitOfPower.WATT
+        self._min_update_interval = float(
+            entry.data.get(CONF_PHASE_POWER_UPDATE_INTERVAL, PHASE_POWER_UPDATE_INTERVAL)
+        )
 
     @property
     def native_value(self) -> int | None:
@@ -171,8 +175,6 @@ class EcotrackerPowerPhase1Sensor(EcotrackerSensorBase):
 class EcotrackerPowerPhase2Sensor(EcotrackerSensorBase):
     """Representation of Ecotracker Power Phase 2 Sensor."""
 
-    _min_update_interval = PHASE_POWER_UPDATE_INTERVAL
-
     def __init__(self, coordinator: EcotrackerCoordinator, entry: EcotrackerConfigEntry) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator, entry)
@@ -181,6 +183,9 @@ class EcotrackerPowerPhase2Sensor(EcotrackerSensorBase):
         self._attr_device_class = SensorDeviceClass.POWER
         self._attr_state_class = SensorStateClass.MEASUREMENT
         self._attr_native_unit_of_measurement = UnitOfPower.WATT
+        self._min_update_interval = float(
+            entry.data.get(CONF_PHASE_POWER_UPDATE_INTERVAL, PHASE_POWER_UPDATE_INTERVAL)
+        )
 
     @property
     def native_value(self) -> int | None:
@@ -191,8 +196,6 @@ class EcotrackerPowerPhase2Sensor(EcotrackerSensorBase):
 class EcotrackerPowerPhase3Sensor(EcotrackerSensorBase):
     """Representation of Ecotracker Power Phase 3 Sensor."""
 
-    _min_update_interval = PHASE_POWER_UPDATE_INTERVAL
-
     def __init__(self, coordinator: EcotrackerCoordinator, entry: EcotrackerConfigEntry) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator, entry)
@@ -201,6 +204,9 @@ class EcotrackerPowerPhase3Sensor(EcotrackerSensorBase):
         self._attr_device_class = SensorDeviceClass.POWER
         self._attr_state_class = SensorStateClass.MEASUREMENT
         self._attr_native_unit_of_measurement = UnitOfPower.WATT
+        self._min_update_interval = float(
+            entry.data.get(CONF_PHASE_POWER_UPDATE_INTERVAL, PHASE_POWER_UPDATE_INTERVAL)
+        )
 
     @property
     def native_value(self) -> int | None:
@@ -211,8 +217,6 @@ class EcotrackerPowerPhase3Sensor(EcotrackerSensorBase):
 class EcotrackerPowerAvgSensor(EcotrackerSensorBase):
     """Representation of Ecotracker Power Average Sensor."""
 
-    _min_update_interval = POWER_AVG_UPDATE_INTERVAL
-
     def __init__(self, coordinator: EcotrackerCoordinator, entry: EcotrackerConfigEntry) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator, entry)
@@ -221,6 +225,9 @@ class EcotrackerPowerAvgSensor(EcotrackerSensorBase):
         self._attr_device_class = SensorDeviceClass.POWER
         self._attr_state_class = SensorStateClass.MEASUREMENT
         self._attr_native_unit_of_measurement = UnitOfPower.WATT
+        self._min_update_interval = float(
+            entry.data.get(CONF_POWER_AVG_UPDATE_INTERVAL, POWER_AVG_UPDATE_INTERVAL)
+        )
 
     @property
     def native_value(self) -> int | None:
@@ -231,8 +238,6 @@ class EcotrackerPowerAvgSensor(EcotrackerSensorBase):
 class EcotrackerEnergyInSensor(EcotrackerSensorBase):
     """Representation of Ecotracker Energy Counter In Sensor."""
 
-    _min_update_interval = ENERGY_UPDATE_INTERVAL
-
     def __init__(self, coordinator: EcotrackerCoordinator, entry: EcotrackerConfigEntry) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator, entry)
@@ -241,6 +246,7 @@ class EcotrackerEnergyInSensor(EcotrackerSensorBase):
         self._attr_device_class = SensorDeviceClass.ENERGY
         self._attr_state_class = SensorStateClass.TOTAL_INCREASING
         self._attr_native_unit_of_measurement = UnitOfEnergy.WATT_HOUR
+        self._min_update_interval = float(entry.data.get(CONF_ENERGY_UPDATE_INTERVAL, ENERGY_UPDATE_INTERVAL))
 
     @property
     def native_value(self) -> int | None:
@@ -251,8 +257,6 @@ class EcotrackerEnergyInSensor(EcotrackerSensorBase):
 class EcotrackerEnergyInT1Sensor(EcotrackerSensorBase):
     """Representation of Ecotracker Energy Counter InT1 Sensor."""
 
-    _min_update_interval = ENERGY_UPDATE_INTERVAL
-
     def __init__(self, coordinator: EcotrackerCoordinator, entry: EcotrackerConfigEntry) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator, entry)
@@ -261,6 +265,7 @@ class EcotrackerEnergyInT1Sensor(EcotrackerSensorBase):
         self._attr_device_class = SensorDeviceClass.ENERGY
         self._attr_state_class = SensorStateClass.TOTAL_INCREASING
         self._attr_native_unit_of_measurement = UnitOfEnergy.WATT_HOUR
+        self._min_update_interval = float(entry.data.get(CONF_ENERGY_UPDATE_INTERVAL, ENERGY_UPDATE_INTERVAL))
 
     @property
     def native_value(self) -> int | None:
@@ -271,8 +276,6 @@ class EcotrackerEnergyInT1Sensor(EcotrackerSensorBase):
 class EcotrackerEnergyInT2Sensor(EcotrackerSensorBase):
     """Representation of Ecotracker Energy Counter InT2 Sensor."""
 
-    _min_update_interval = ENERGY_UPDATE_INTERVAL
-
     def __init__(self, coordinator: EcotrackerCoordinator, entry: EcotrackerConfigEntry) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator, entry)
@@ -281,6 +284,7 @@ class EcotrackerEnergyInT2Sensor(EcotrackerSensorBase):
         self._attr_device_class = SensorDeviceClass.ENERGY
         self._attr_state_class = SensorStateClass.TOTAL_INCREASING
         self._attr_native_unit_of_measurement = UnitOfEnergy.WATT_HOUR
+        self._min_update_interval = float(entry.data.get(CONF_ENERGY_UPDATE_INTERVAL, ENERGY_UPDATE_INTERVAL))
 
     @property
     def native_value(self) -> int | None:
@@ -291,8 +295,6 @@ class EcotrackerEnergyInT2Sensor(EcotrackerSensorBase):
 class EcotrackerEnergyOutSensor(EcotrackerSensorBase):
     """Representation of Ecotracker Energy Counter Out Sensor."""
 
-    _min_update_interval = ENERGY_UPDATE_INTERVAL
-
     def __init__(self, coordinator: EcotrackerCoordinator, entry: EcotrackerConfigEntry) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator, entry)
@@ -301,6 +303,7 @@ class EcotrackerEnergyOutSensor(EcotrackerSensorBase):
         self._attr_device_class = SensorDeviceClass.ENERGY
         self._attr_state_class = SensorStateClass.TOTAL_INCREASING
         self._attr_native_unit_of_measurement = UnitOfEnergy.WATT_HOUR
+        self._min_update_interval = float(entry.data.get(CONF_ENERGY_UPDATE_INTERVAL, ENERGY_UPDATE_INTERVAL))
 
     @property
     def native_value(self) -> int | None:
@@ -311,8 +314,6 @@ class EcotrackerEnergyOutSensor(EcotrackerSensorBase):
 class EcotrackerAgePowerSensor(EcotrackerSensorBase):
     """Representation of Ecotracker Age Power Sensor."""
 
-    _min_update_interval = DIAGNOSTIC_UPDATE_INTERVAL
-
     def __init__(self, coordinator: EcotrackerCoordinator, entry: EcotrackerConfigEntry) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator, entry)
@@ -321,6 +322,9 @@ class EcotrackerAgePowerSensor(EcotrackerSensorBase):
         self._attr_entity_category = EntityCategory.DIAGNOSTIC
         self._attr_entity_registry_enabled_default = False
         self._attr_native_unit_of_measurement = "ms"
+        self._min_update_interval = float(
+            entry.data.get(CONF_DIAGNOSTIC_UPDATE_INTERVAL, DIAGNOSTIC_UPDATE_INTERVAL)
+        )
 
     @property
     def native_value(self) -> int | None:
@@ -364,8 +368,6 @@ class EcotrackerScanIntervalSensor(EcotrackerSensorBase):
 class EcotrackerRssiSensor(EcotrackerSensorBase):
     """Representation of the Ecotracker Wi-Fi signal strength."""
 
-    _min_update_interval = RSSI_UPDATE_INTERVAL
-
     def __init__(self, coordinator: EcotrackerCoordinator, entry: EcotrackerConfigEntry) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator, entry)
@@ -373,6 +375,12 @@ class EcotrackerRssiSensor(EcotrackerSensorBase):
         self._attr_unique_id = f"{entry.entry_id}_rssi"
         self._attr_entity_category = EntityCategory.DIAGNOSTIC
         self._attr_entity_registry_enabled_default = False
+        self._min_update_interval = float(
+            entry.data.get(CONF_DIAGNOSTIC_UPDATE_INTERVAL, DIAGNOSTIC_UPDATE_INTERVAL)
+        )
+        self._min_update_interval = float(
+            entry.data.get(CONF_DIAGNOSTIC_UPDATE_INTERVAL, DIAGNOSTIC_UPDATE_INTERVAL)
+        )
 
     @property
     def native_value(self) -> int | None:

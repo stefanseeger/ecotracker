@@ -9,9 +9,17 @@ from homeassistant.data_entry_flow import AbortFlow
 
 from custom_components.ecotracker.config_flow import CannotConnect, ConfigFlow
 from custom_components.ecotracker.const import (
+    CONF_DIAGNOSTIC_UPDATE_INTERVAL,
+    CONF_ENERGY_UPDATE_INTERVAL,
+    CONF_PHASE_POWER_UPDATE_INTERVAL,
+    CONF_POWER_AVG_UPDATE_INTERVAL,
     CONF_POWER_THRESHOLD,
     CONF_SCAN_INTERVAL,
     DEFAULT_POWER_THRESHOLD,
+    DIAGNOSTIC_UPDATE_INTERVAL,
+    ENERGY_UPDATE_INTERVAL,
+    PHASE_POWER_UPDATE_INTERVAL,
+    POWER_AVG_UPDATE_INTERVAL,
 )
 from custom_components.ecotracker.coordinator import InvalidData
 from tests.mock_data import MOCK_ENTRY_DATA
@@ -53,7 +61,7 @@ async def test_user_flow_aborts_duplicate_before_validating():
 
 
 async def test_reconfigure_form_defaults_to_current_entry_data():
-    """The reconfigure form is prefilled with the saved IP, interval, and power threshold."""
+    """The reconfigure form is prefilled with saved settings and default intervals."""
     flow = create_flow()
     entry = MagicMock(data={"ip_address": "192.168.1.42", CONF_SCAN_INTERVAL: 30})
     flow._get_reconfigure_entry = MagicMock(return_value=entry)
@@ -66,6 +74,10 @@ async def test_reconfigure_form_defaults_to_current_entry_data():
         "ip_address": "192.168.1.42",
         CONF_SCAN_INTERVAL: 30,
         CONF_POWER_THRESHOLD: DEFAULT_POWER_THRESHOLD,
+        CONF_PHASE_POWER_UPDATE_INTERVAL: PHASE_POWER_UPDATE_INTERVAL,
+        CONF_POWER_AVG_UPDATE_INTERVAL: POWER_AVG_UPDATE_INTERVAL,
+        CONF_ENERGY_UPDATE_INTERVAL: ENERGY_UPDATE_INTERVAL,
+        CONF_DIAGNOSTIC_UPDATE_INTERVAL: DIAGNOSTIC_UPDATE_INTERVAL,
     }
 
 
@@ -79,6 +91,10 @@ async def test_reconfigure_form_preserves_submitted_data_after_error():
         "ip_address": "192.168.1.99",
         CONF_SCAN_INTERVAL: 45,
         CONF_POWER_THRESHOLD: 10,
+        CONF_PHASE_POWER_UPDATE_INTERVAL: 15,
+        CONF_POWER_AVG_UPDATE_INTERVAL: 30,
+        CONF_ENERGY_UPDATE_INTERVAL: 120,
+        CONF_DIAGNOSTIC_UPDATE_INTERVAL: 90,
     }
 
     result = await flow.async_step_reconfigure(user_input)

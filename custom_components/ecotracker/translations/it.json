@@ -7,11 +7,19 @@
         "data": {
           "ip_address": "Indirizzo IP",
           "scan_interval": "Intervallo di polling",
-          "power_threshold": "Soglia variazione potenza (W)"
+          "power_threshold": "Soglia variazione potenza (W)",
+          "phase_power_update_interval": "Intervallo potenza per fase",
+          "power_avg_update_interval": "Intervallo potenza media",
+          "energy_update_interval": "Intervallo contatori energia",
+          "diagnostic_update_interval": "Intervallo sensori diagnostici"
         },
         "data_description": {
           "scan_interval": "Quanto spesso interrogare il dispositivo (1-86400 secondi)",
-          "power_threshold": "Variazione minima di potenza in watt prima dell'aggiornamento (0 = segnala ogni variazione, heartbeat max 30 s)"
+          "power_threshold": "Variazione minima di potenza in watt prima dell'aggiornamento (0 = segnala ogni variazione, heartbeat max 30 s)",
+          "phase_power_update_interval": "Intervallo minimo per potenza fase 1-3 in secondi (0 = uguale al polling)",
+          "power_avg_update_interval": "Intervallo minimo per potenza media in secondi (0 = uguale al polling)",
+          "energy_update_interval": "Intervallo minimo per contatori energia in secondi (0 = uguale al polling)",
+          "diagnostic_update_interval": "Intervallo minimo per sensori diagnostici (età, segnale Wi‑Fi) in secondi (0 = uguale al polling)"
         }
       }
     },
